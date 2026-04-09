@@ -7,7 +7,7 @@
 }
 
 body {
-    background: var(--black);
+    background: var(--white);
     color: var(--black);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
@@ -27,7 +27,7 @@ nav{
     align-items: center;
     padding: 0 2 rem;
     height: 58px;
-    background: var(--black);
+    background: var(--white);
     border: 2px solid var(--red);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
@@ -42,7 +42,7 @@ nav{
 .nav-links a {
     display: block;
     padding: 0.45rem 1rem;
-    color: var(--white);
+    color: var(--black);
     text-decoration: none;
     font-size: 0.78rem;
     font-weight: 500;
