@@ -193,7 +193,7 @@ color: var(--black);
 .search-bar {
     display: flex;
     align-items: center;
-    background: var(--black);
+    background: var(--white);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 8px 28px rgba(0,0,0,0.18);
@@ -201,7 +201,7 @@ color: var(--black);
 
 .search-icon {
     padding: 0 1rem 0 1.3rem;
-    color: rgba(255,255,255,0.4);
+    color: rgba(0,0,0,0.4);
     font-size: 1rem;
     user-select: none;
 }
@@ -212,12 +212,12 @@ color: var(--black);
     border: none;
     outline: none;
     padding: 1.15rem 0.5rem;
-    color: var(--white);
+    color: var(--black);
     font-family: 'DM Sans', sans-serif;
     font-size: 0.92rem;
 }
 
-.search-bar input::placeholder { color: rgba(255,255,255,0.38); }
+.search-bar input::placeholder { color: rgba(0,0,0,0.38); }
 
 .search-bar button {
     background: var(--red);
