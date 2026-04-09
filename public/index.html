@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
+    <link rel="styles" href="style.css">
     <title>TT TaskFinder</title>
 </head>
 
@@ -12,21 +13,28 @@
     <header>
         <h1>TT TaskFinder</h1>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">About Us</a>
-            <a href="#">Become a Tasker</a>
-            <a href="#">Post a Job</a>
-            <a href="#">Search</a>           
+            <a href="index.html">Home</a>
+            <a href="aboutUs.html">About Us</a>
+            <a href="tasker.html">Become a Tasker</a>
+            <a href="taskee.html">Post a Job</a>
         </nav>
     </header>
     <main>
         <article>
-            
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <input type="email" id="email" placeholder="Enter email" required><br><br>
+                <input type="password" id="password" placeholder="Enter password" required><br><br>
+                <button type="submit">Create Account</button>
+            </form>
+            <p id="message"></p>
         </article>
     </main>
     <footer>
         <p>© 2026 TaskFinder TT · Find help, fast.</p>
     </footer>
+
+    <script type="module" src="../src/main.js"></script>
 </body>
 
 </html>
