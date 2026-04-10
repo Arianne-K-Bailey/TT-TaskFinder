@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="manifest.json">
     <title>Browse Jobs · TT TaskFinder</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Jobs.css">
-    
+    <link rel="stylesheet" href="/public/components/navbar.css">
 </head>
 
 <body>
+    <div id="navbar"></div>
 
     <div class="page-header">
         <p class="eyebrow">Trinidad & Tobago</p>
@@ -41,6 +42,7 @@
 
     <div class="meta-row">
         <span><strong id="jobCount">0</strong> jobs found</span>
+
         <select id="sortSelect" onchange="filterJobs()">
             <option value="newest">Newest First</option>
             <option value="pay_high">Highest Pay</option>
@@ -57,136 +59,177 @@
     </footer>
 
     <script type="module">
+        import { loadNavbar } from "./js/navbar.js";
+        import { JOB_LISTING } from "./js/API-jobs.js";
+        import { db } from "./firebase/firebaseConfig.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD9MFIl-OIowXr2eRe4-m6DYhHAPQV99zc",
-            authDomain: "tt-taskfinder.firebaseapp.com",
-            projectId: "tt-taskfinder",
-            storageBucket: "tt-taskfinder.firebasestorage.app",
-            messagingSenderId: "708139007903",
-            appId: "1:708139007903:web:95db4b7bae4b6a00e147aa"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const SAMPLE_JOBS = [
-            { id: '1', title: 'Deep Clean House',        category: 'Cleaning',  pay: 300, location: 'Port of Spain', description: 'Need a thorough deep clean of a 3-bedroom house. All supplies provided.',              poster: 'Maria J.',   postedAt: new Date('2026-04-09') },
-            { id: '2', title: 'Grocery Delivery Run',    category: 'Delivery',  pay: 80,  location: 'San Fernando',  description: 'Pick up groceries from Massy and deliver to my address. Receipt reimbursed.',        poster: 'Devon A.',   postedAt: new Date('2026-04-08') },
-            { id: '3', title: 'Lawn Mowing & Trim',      category: 'Gardening', pay: 150, location: 'Chaguanas',     description: 'Mow front and back yard, trim hedges and clear drain. About 2 hours of work.',       poster: 'Rashida S.', postedAt: new Date('2026-04-08') },
-            { id: '4', title: 'Laptop Repair / Tune-up', category: 'Tech',      pay: 200, location: 'Arima',         description: 'Laptop running slow — diagnose and fix. May need RAM upgrade or OS reinstall.',       poster: 'Chris B.',   postedAt: new Date('2026-04-07') },
-            { id: '5', title: 'Leaky Pipe Fix',          category: 'Handyman',  pay: 250, location: 'Tunapuna',      description: 'Pipe under kitchen sink leaking. Need someone with plumbing experience ASAP.',        poster: 'Anita R.',   postedAt: new Date('2026-04-09') },
-            { id: '6', title: 'CSEC Maths Tutoring',     category: 'Tutoring',  pay: 120, location: 'Diego Martin',  description: 'Tutor for my Form 4 son struggling with algebra and geometry. Twice a week.',        poster: 'Peter M.',   postedAt: new Date('2026-04-06') },
-        ];
+        loadNavbar();
 
         let allJobs = [];
-        let activeCategory = 'All';
+        let activeCategory = "All";
 
+        // ---------------- NORMALIZE JOB ----------------
+        function normalizeJob(job) {
+            return {
+                id: job.id,
+                title: job.title || "",
+                description: job.description || "",
+                category: job.category || "Other",
+                location: job.location || "Unknown",
+                pay: Number(job.pay || 0),
+                poster: job.poster || job.taskerName || "User",
+                postedAt: job.postedAt || job.createdAt || new Date()
+            };
+        }
+
+        // ---------------- RENDER ----------------
         function renderJobs(jobs) {
-            let grid = document.querySelector('#jobsGrid');
-            let countEl = document.querySelector('#jobCount');
+
+            const grid = document.getElementById("jobsGrid");
+            const countEl = document.getElementById("jobCount");
 
             countEl.textContent = jobs.length;
 
-            if (jobs.length === 0) {
-                grid.innerHTML = '<div class="empty-state">No jobs found. Try a different search or category.</div>';
+            if (!jobs.length) {
+                grid.innerHTML = `<div class="empty-state">No jobs found.</div>`;
                 return;
             }
 
-            let html = '';
+            let html = "";
 
-            for (let job of jobs) {
-                let daysAgo = Math.floor((Date.now() - job.postedAt) / 86400000);
-                let timeLabel = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + 'd ago';
+            jobs.forEach(job => {
+
+                const postedDate =
+                    job.postedAt instanceof Date
+                        ? job.postedAt
+                        : new Date(job.postedAt);
+
+                const daysAgo = Math.floor((Date.now() - postedDate) / 86400000);
+
+                const timeLabel =
+                    daysAgo === 0 ? "Today" :
+                    daysAgo === 1 ? "Yesterday" :
+                    `${daysAgo}d ago`;
 
                 html += `
                     <div class="job-card">
+
                         <div class="card-top">
                             <span class="category-badge">${job.category}</span>
                             <div class="pay-amount">$${job.pay} <small>TTD</small></div>
                         </div>
+
                         <div class="job-title">${job.title}</div>
                         <div class="job-desc">${job.description}</div>
+
                         <div class="card-meta">
                             <span>📍 ${job.location}</span>
                             <span>🕐 ${timeLabel}</span>
                         </div>
+
                         <div class="card-footer">
                             <span class="poster">Posted by ${job.poster}</span>
-                            <a class="view-btn" href="job-detail.html?id=${job.id}">View Details</a>
+                            <a class="view-btn" href="job-detail.html?id=${job.id}">
+                                View Details
+                            </a>
                         </div>
+
                     </div>
                 `;
-            }
+            });
 
             grid.innerHTML = html;
         }
 
+        // ---------------- LOAD JOBS ----------------
         async function getJobs() {
+
+            let firebaseJobs = [];
+
             try {
-                let q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
-                let snapshot = await getDocs(q);
+                const snapshot = await getDocs(collection(db, "jobs"));
 
-                if (!snapshot.empty) {
-                    allJobs = snapshot.docs.map(function(doc) {
-                        return {
-                            id: doc.id,
-                            ...doc.data(),
-                            postedAt: doc.data().postedAt?.toDate() || new Date()
-                        };
+                firebaseJobs = snapshot.docs.map(doc => {
+                    const data = doc.data();
+
+                    return normalizeJob({
+                        id: doc.id,
+                        ...data,
+                        postedAt: data.createdAt?.toDate() // 🔥 correct field
                     });
-                } else {
-                    allJobs = SAMPLE_JOBS;
-                }
+                });
 
-            } catch (e) {
-                console.log('Could not reach Firestore, using sample data:', e);
-                allJobs = SAMPLE_JOBS;
+                console.log("🔥 Firestore jobs:", firebaseJobs);
+
+            } catch (err) {
+                console.log("Firestore failed:", err);
             }
+
+            // normalize API jobs too
+            const apiJobs = JOB_LISTING.map(job => normalizeJob(job));
+
+            // MERGE BOTH
+            allJobs = [...apiJobs, ...firebaseJobs];
 
             filterJobs();
         }
 
+        // ---------------- FILTER ----------------
         function filterJobs() {
-            let searchVal = document.querySelector('#searchInput').value.toLowerCase();
-            let sortVal = document.querySelector('#sortSelect').value;
 
-            let filtered = allJobs.filter(function(job) {
-                let matchCategory = activeCategory === 'All' || job.category === activeCategory;
-                let matchSearch = job.title.toLowerCase().includes(searchVal)
-                               || job.category.toLowerCase().includes(searchVal)
-                               || job.location.toLowerCase().includes(searchVal);
+            const searchVal = document.getElementById("searchInput").value.toLowerCase();
+            const sortVal = document.getElementById("sortSelect").value;
+
+            let filtered = allJobs.filter(job => {
+
+                const matchCategory =
+                    activeCategory === "All" ||
+                    job.category.toLowerCase() === activeCategory.toLowerCase();
+
+                const matchSearch =
+                    job.title.toLowerCase().includes(searchVal) ||
+                    job.category.toLowerCase().includes(searchVal) ||
+                    job.location.toLowerCase().includes(searchVal);
+
                 return matchCategory && matchSearch;
             });
 
-            if (sortVal === 'pay_high') {
-                filtered.sort(function(a, b) { return b.pay - a.pay; });
-            } else if (sortVal === 'pay_low') {
-                filtered.sort(function(a, b) { return a.pay - b.pay; });
-            } else {
-                filtered.sort(function(a, b) { return b.postedAt - a.postedAt; });
+            // SORT
+            if (sortVal === "pay_high") {
+                filtered.sort((a, b) => b.pay - a.pay);
+            }
+            else if (sortVal === "pay_low") {
+                filtered.sort((a, b) => a.pay - b.pay);
+            }
+            else {
+                filtered.sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt));
             }
 
             renderJobs(filtered);
         }
 
+        // ---------------- CATEGORY ----------------
         function setCategory(cat, el) {
+
             activeCategory = cat;
-            let pills = document.querySelectorAll('.categories span');
-            for (let pill of pills) {
-                pill.classList.remove('active');
-            }
-            el.classList.add('active');
+
+            document.querySelectorAll(".categories span")
+                .forEach(s => s.classList.remove("active"));
+
+            el.classList.add("active");
+
             filterJobs();
         }
 
-        document.querySelector('#searchInput').addEventListener('keyup', filterJobs);
+        // ---------------- EVENTS ----------------
+        document.getElementById("searchInput")
+            .addEventListener("keyup", filterJobs);
 
         window.filterJobs = filterJobs;
         window.setCategory = setCategory;
+
+        // INIT
         getJobs();
 
     </script>
