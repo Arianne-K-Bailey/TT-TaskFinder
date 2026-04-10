@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TT Taskfinder – Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="profile.css"/>
+</head>
+<body>
+ 
+  <div class="nav-wrapper">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#index.html">Home</a></li>
+        <li><a href="#aboutus.html">About</a></li>
+        <li><a href="#jobs.html">Browse Jobs</a></li>
+        <li><a href="#taskee.html">Post a Job</a></li>
+      </ul>
+    </nav>
+  </div>
+ 
+  <div class="page">
+ 
+    <div class="profile-card">
+      <div class="profile-avatar-wrap">
+        <img
+          class="profile-avatar"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80"
+          alt="Profile picture"
+        />
+        <div class="avatar-edit">📷</div>
+      </div>
+      <div class="profile-card-body">
+        <div class="profile-username"><span>@</span>john_doe</div>
+        <span class="profile-role">Job Seeker</span>
+        <div class="profile-stats">
+          <div class="p-stat">
+            <strong>12</strong>
+            <span>Applied</span>
+          </div>
+          <div class="p-stat">
+            <strong>3</strong>
+            <span>Saved</span>
+          </div>
+          <div class="p-stat">
+            <strong>1</strong>
+            <span>Hired</span>
+          </div>
+        </div>
+        <button class="btn-edit-profile">Edit Profile</button>
+      </div>
+    </div>
+ 
+    <div class="profile-info">
+      <div class="info-header">
+        <div>
+          <span class="info-eyebrow">Account Details</span>
+          <h2>My Profile</h2>
+        </div>
+      </div>
+ 
+      <div class="info-panel">
+        <div class="info-panel-header">
+          <div class="panel-dot"></div>
+          <span>Personal Information</span>
+        </div>
+ 
+        <div class="field-row">
+          <span class="field-label">Username</span>
+          <span class="field-value username-val">@john_doe</span>
+        </div>
+ 
+        <div class="field-row">
+          <span class="field-label">Full Name</span>
+          <span class="field-value">John Daniel Doe</span>
+        </div>
+ 
+        <div class="field-row">
+          <span class="field-label">Date of Birth</span>
+          <span class="field-value">14 March 1998</span>
+        </div>
+ 
+        <div class="field-row">
+          <span class="field-label">Email Address</span>
+          <span class="field-value">johndoe@email.com</span>
+        </div>
+ 
+        <div class="field-row">
+          <span class="field-label">Phone Number</span>
+          <span class="field-value">+1 (868) 123-4567</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+  <script>
+        async function loadAppliedJobs() {
+          const grid = document.getElementById('jobs-grid');
+ 
+          try {
+            const response = await fetch('https://your-api.com/applied-jobs');
+            const jobs = await response.json();
+ 
+            if (jobs.length === 0) {
+              grid.innerHTML = '<p class="no-jobs">No applications yet.</p>';
+              return;
+            }
+ 
+            jobs.forEach(job => {
+              grid.innerHTML += `
+                <div class="job-card">
+                  <div class="job-card-top">
+                    <span class="job-company">${job.company}</span>
+                    <span class="job-status ${job.status}">${job.status}</span>
+                  </div>
+                  <div class="job-card-body">
+                    <div class="job-title">${job.title}</div>
+                    <div class="job-meta">
+                      <span class="job-tag">${job.type}</span>
+                      <span class="job-tag">${job.location}</span>
+                      <span class="job-tag">${job.category}</span>
+                    </div>
+                    <div class="job-date">Applied: ${job.date}</div>
+                  </div>
+                </div>
+              `;
+            });
+ 
+          } catch (error) {
+            grid.innerHTML = '<p class="no-jobs">Failed to load applications. Please try again.</p>';
+            console.error('Error loading jobs:', error);
+          }
+        }
+ 
+        loadAppliedJobs();
+      </script>
+ 
+</body>
+</html>
