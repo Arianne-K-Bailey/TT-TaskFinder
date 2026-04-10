@@ -4,7 +4,7 @@ from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 export function loadNavbar() {
   const navTarget = document.getElementById("navbar");
-  fetch("./components/navbar.html")
+  fetch("/public/components/navbar.html")
     .then(res => res.text())
     .then(html => {
       navTarget.innerHTML = html;
