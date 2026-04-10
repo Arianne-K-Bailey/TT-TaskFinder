@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="PostJob.css">
   <title>Post Job</title>
 
 </head>
@@ -71,9 +72,83 @@
   </main>
 
   <script>
+    import { auth, db } from "./firebase/firebaseConfig.js";
+
+    import {
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "Login.html";
+        return;
+      }
+      currentUser = user;
+    });
+
+
+
     const form = document.getElementById("jobForm");
     const statusText = document.getElementById("formStatus");
     const btn = document.getElementById("submitBtn");
+
+    // form.addEventListener("submit", async (e) => {
+    //   e.preventDefault();
+
+    //   clearErrors();
+    //   statusText.textContent = "";
+
+    //   const data = {
+    //     title: getValue("title"),
+    //     description: getValue("description"),
+    //     category: getValue("category"),
+    //     pay: getValue("pay"),
+    //     location: getValue("location"),
+    //     name: getValue("name"),
+    //   };
+
+    //   const isValid = validate(data);
+    //   if (!isValid) return;
+
+    //   btn.disabled = true;
+    //   btn.textContent = "Posting...";
+
+    //   try {
+    //     await addDoc(collection(db, "jobs"), {
+    //       title: data.title,
+    //       description: data.description,
+    //       category: data.category,
+    //       price: Number(data.pay),
+    //       location: data.location,
+
+    //       taskerName: data.name,
+
+    //       taskerId: currentUser.uid,
+    //       taskeeId: null,
+
+    //       status: "open",
+
+    //       createdAt: serverTimestamp()
+    //     });
+    //     // // simulate API call
+    //     // await new Promise(res => setTimeout(res, 1200));
+
+    //     // statusText.textContent = "✅ Job posted successfully.";
+    //     // form.reset();
+
+    //   } catch {
+    //     statusText.textContent = "❌ Something went wrong.";
+    //   }
+
+    //   btn.disabled = false;
+    //   btn.textContent = "Post Job";
+    // });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -97,14 +172,27 @@
       btn.textContent = "Posting...";
 
       try {
-        // simulate API call
-        await new Promise(res => setTimeout(res, 1200));
+        await addDoc(collection(db, "jobs"), {
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          price: Number(data.pay),
+          location: data.location,
+
+          taskerName: currentUser.displayName,
+          taskerId: currentUser.uid,
+          taskeeId: null,
+
+          status: "open",
+          createdAt: serverTimestamp()
+        });
 
         statusText.textContent = "✅ Job posted successfully.";
         form.reset();
 
-      } catch {
-        statusText.textContent = "❌ Something went wrong.";
+      } catch (error) {
+        console.error(error);
+        statusText.textContent = "❌ Failed to post job.";
       }
 
       btn.disabled = false;

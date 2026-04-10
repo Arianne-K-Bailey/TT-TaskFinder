@@ -6,6 +6,111 @@
 <title>Profile - TT TaskFinder</title>
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="profile.css">
+<link rel="stylesheet" href="../public/components/navbar.css">
+</head>
+
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1>My Profile</h1>
+        <p style="margin:0;color:#64748b;">Manage your account and activity</p>
+      </div>
+
+      <div class="toggle">
+        <button id="workerBtn" class="active" onclick="setMode('worker')">Taskee</button>
+        <button id="clientBtn" onclick="setMode('client')">Tasker</button>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- PROFILE CARD -->
+      <div class="card center">
+        <div class="avatar">👤</div>
+
+        <h3 id="username">Loading...</h3>
+        <p id="email">Loading...</p>
+
+        <p>⭐ 4.8 • 47 jobs completed</p>
+
+        <hr>
+
+        <p id="phone">Loading...</p>
+
+        <hr>
+
+        <h4>Skills</h4>
+        <p>Lawn Care • Repairs • Cleaning • Tech Support</p>
+
+        <button class="btn" style="width:100%;">Edit Profile</button>
+      </div>
+
+      <!-- JOBS CARD -->
+      <div class="card">
+
+        <!-- TOGGLES INSIDE CARD -->
+        <div class="tabs">
+          <button id="tab1" class="active" onclick="showTab('main')">Active Jobs</button>
+          <button id="tab2" onclick="showTab('saved')">Saved</button>
+        </div>
+
+        <!-- TASKEE VIEW -->
+        <div id="workerView">
+
+          <h4>Taskee (Jobs You Accepted)</h4>
+          <div id="taskeeJobs"></div>
+
+        </div>
+
+        <!-- TASKER VIEW -->
+        <div id="clientView" style="display:none;">
+
+          <h4>Tasker (Jobs You Posted)</h4>
+          <div id="taskerJobs"></div>
+
+        </div>
+
+        <!-- SAVED TAB -->
+        <div id="saved" style="display:none;">
+          <p>No saved tasks yet.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- <script type="module">
+    import { loadNavbar } from "./js/navbar.js";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadNavbar();
+    });
+  </script> -->
+
+  <script type="module">
+    import { loadNavbar } from "./js/navbar.js";
+    loadNavbar();
+  </script>
+
+  <script type="module" src="./profile.js"></script>
+
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile - TT TaskFinder</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="profile.css">
 
 </head>
 
@@ -29,15 +134,17 @@
 
     <div class="card center">
       <div class="avatar">👤</div>
-      <h3>John Martinez</h3>
-      <p style="color:#64748b;">john.martinez@email.com</p>
+      
+      <h3 id="username">Loading...</h3>
+
+      <p id="email">Loading...</p>
 
       <p>⭐ 4.8 • 47 jobs completed</p>
 
       <hr>
 
-      <p><strong>Location:</strong> Port of Spain</p>
-      <p><strong>Phone:</strong> +1 (868) 555-0123</p>
+      <!-- <p><strong>Location:</strong> Port of Spain</p> -->
+      <!-- <p id="phone"></p>
 
       <hr>
 
@@ -111,29 +218,46 @@
   </div>
 </div>
 
-<script>
-let mode = "worker";
+<script type="module">
+  import { auth, db } from "./firebase/firebaseConfig.js";
 
-function setMode(m) {
-  mode = m;
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  document.getElementById("workerBtn").classList.remove("active");
-  document.getElementById("clientBtn").classList.remove("active");
+  window.addEventListener("DOMContentLoaded", () => {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "Login.html";
+        return;
+      }
 
-  document.getElementById(m + "Btn").classList.add("active");
+      console.log("Logged in UID:", user.uid);
 
-  document.getElementById("workerView").style.display = m === "worker" ? "block" : "none";
-  document.getElementById("clientView").style.display = m === "client" ? "block" : "none";
-}
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
 
-function showTab(tab) {
-  document.getElementById("main").style.display = tab === "main" ? "block" : "none";
-  document.getElementById("saved").style.display = tab === "saved" ? "block" : "none";
+        if (!userSnap.exists()) {
+          console.error("No user profile found in Firestore");
+          return;
+        }
 
-  document.getElementById("tab1").classList.toggle("active", tab === "main");
-  document.getElementById("tab2").classList.toggle("active", tab === "saved");
-}
+        const data = userSnap.data();
+
+        document.getElementById("username").textContent = data.username || "No Username";
+        document.getElementById("email").textContent = data.email || "No Email";
+
+        document.getElementById("phone").textContent =
+          data.phone ? `📞 ${data.phone}` : "📞 Not provided";
+
+        console.log("User data loaded:", data);
+
+      } catch (error) {
+        console.error("Error loading profile:", error);
+      }
+    });
+  });
 </script>
 
 </body>
-</html>
+</html> -->
