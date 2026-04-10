@@ -1,67 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <title>TT TaskFinder</title>
+    <style>
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #dc2626;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-actions .login {
+            text-decoration: none;
+            color: #475569;
+        }
+
+        .nav-actions .signup {
+            background: #dc2626;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .nav-actions .signup:hover {
+            background: #b91c1c;
+        }
+
+        /* MOBILE */
+        .menu-toggle {
+            display: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-actions {
+                display: none;
+            }
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            color: #1e293b;
+            background: #f8fafc;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #dc2626, #7f1d1d);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            color: #fee2e2;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box input {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            width: 250px;
+        }
+
+        .search-box button {
+            padding: 12px 18px;
+            border: none;
+            background: white;
+            color: #dc2626;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* SECTION */
+        .section {
+            padding: 60px 20px;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            transition: 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #dc2626;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* ICON */
+        .icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* CTA */
+        .cta {
+            background: #dc2626;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .cta p {
+            color: #fee2e2;
+        }
+
+        /* BUTTON */
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .btn-white {
+            background: white;
+            color: #dc2626;
+        }
+
+        .btn-outline {
+            border: 1px solid white;
+            color: white;
+        }
+
+        /* The sidebar menu */
+        .sidebar {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #111; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+        /* The sidebar links */
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Position and style the close button (top right corner) */
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* The button used to open the sidebar */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s; /* If you want a transition effect */
+            padding: 20px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidebar {padding-top: 15px;}
+            .sidebar a {font-size: 18px;}
+        }
+    </style>
+
 </head>
 
 <body>
-    <header>
-        <h1 class="logo">TT TaskFinder</h1> 
-        <div class="nav-wrapper"> 
-            <nav> 
-                <a href="index.html">Home</a> 
-                <a href="aboutUs.html">About</a> 
-                <a href="tasker.html">Become a Tasker</a> 
-                <a href="taskee.html">Post a Job</a> 
-            </nav> 
+    <nav class="navbar">
+        <div class="nav-container">
+            
+            <div class="logo">
+            🛠️ TT TaskFinder
+            </div>
+
+            <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="browse.html">Browse</a>
+            <a href="#">Post Task</a>
+            </div>
+
+            <div class="nav-actions">
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+            </div>
+
+            <div class="menu-toggle" onclick="toggleMenu()">
+            ☰
+            </div>
+
         </div>
-    </header>
-    <main>
-        <section class="hero">
-            <div class="auth-box">
-                <input type="text" id="identifier" placeholder="Email or Username">
-                <input type="password" id="password" placeholder="Password">
-                <button id="loginBtn">Login</button>
-            </div>
-            <div class="hero-left">
-                <h1>Find Help. Fast.</h1>
-                <p>Connect with trusted taskers across Trinidad & Tobago for anything you need done.</p>
+    </nav>
 
-                <div class="search-bar">
-                    <input type="text" placeholder="What do you need help with?">
-                    <button>Search</button>
+    <section class="hero">
+        <div class="container">
+            <h1>Find reliable help across Trinidad & Tobago</h1>
+            <p>From lawn care to tech support—connect with people who can get it done.</p>
+
+            <div class="search-box">
+                <input type="text" placeholder="What do you need help with?">
+                <button onclick="search()">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>How it works</h2>
+
+            <div class="grid grid-3">
+                <div class="card center">
+                    <div class="icon">🔍</div>
+                    <h3>Browse</h3>
+                    <p>Find tasks near you by category or location.</p>
+                </div>
+
+                <div class="card center">
+                    <div class="icon">📄</div>
+                    <h3>Apply</h3>
+                    <p>Send your details and availability.</p>
+                </div>
+
+                <div class="card center">
+                    <div class="icon">✅</div>
+                    <h3>Get it done</h3>
+                    <p>Connect, complete, and get paid.</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="hero-right">
-                <div class="hero-card">
-                    <p>✔ Cleaning</p>
-                    <p>✔ Deliveries</p>
-                    <p>✔ Repairs</p>
-                    <p>✔ Moving Help</p>
+    <section class="section" style="background:#f1f5f9;">
+        <div class="container">
+            <h2>Popular categories</h2>
+
+            <div class="grid grid-4">
+                <div class="card center">🌿 Lawn Care</div>
+                <div class="card center">🔧 Repairs</div>
+                <div class="card center">🧹 Cleaning</div>
+                <div class="card center">💻 Tech Help</div>
+                <div class="card center">🚰 Plumbing</div>
+                <div class="card center">⚡ Electrical</div>
+                <div class="card center">🎨 Painting</div>
+                <div class="card center">📦 Delivery</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section">
+        <div class="container">
+            <h2>Why use TT TaskFinder?</h2>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <h3>📍 Local first</h3>
+                    <p>Find people in your exact area.</p>
+                </div>
+
+                <div class="card">
+                    <h3>⏱ Flexible</h3>
+                    <p>Work when it fits your schedule.</p>
+                </div>
+
+                <div class="card">
+                    <h3>👥 Community</h3>
+                    <p>Support local workers and businesses.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="categories">
-            <h2>Popular Categories</h2>
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Ready to get started?</h2>
+        <p>Join and start finding or posting jobs today.</p>
 
-            <div class="category-grid">
-                <div class="cat">Cleaning</div>
-                <div class="cat">Handyman</div>
-                <div class="cat">Delivery</div>
-                <div class="cat">Moving</div>
-            </div>
-        </section>
+        <a href="signup.html" class="btn btn-white">Sign Up</a>
+        <a href="browse.html" class="btn btn-outline">Browse Tasks</a>
+    </section>
 
-        </main>
-    <footer>
-        <p>© 2026 TaskFinder TT · Find help, fast.</p>
+
+    <footer style="text-align:center;padding:1.5rem;font-size:0.78rem;color:#aaa;border-top:1px solid #eee;">
+        © 2026 TaskFinder TT · Find help, fast.
     </footer>
 
     <script type="module">
@@ -88,72 +449,135 @@
                 alert(error.message);
             }
         });
-    </script>
 
-    <!-- <script type="module">
-        import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-        import { getFirestore, doc, getDoc } from "firebase/firestore";
+        const SAMPLE_JOBS = [
+            { id: '1', title: 'Deep Clean House', category: 'Cleaning', pay: 300, location: 'Port of Spain', description: 'Need a thorough deep clean of a 3-bedroom house. All supplies provided.', poster: 'Maria J.', postedAt: new Date('2026-04-09') },
+            { id: '2', title: 'Grocery Delivery Run', category: 'Delivery', pay: 80, location: 'San Fernando', description: 'Pick up groceries from Massy and deliver to my address. Receipt reimbursed.', poster: 'Devon A.', postedAt: new Date('2026-04-08') },
+            { id: '3', title: 'Lawn Mowing & Trim', category: 'Gardening', pay: 150, location: 'Chaguanas', description: 'Mow front and back yard, trim hedges and clear drain. About 2 hours of work.', poster: 'Rashida S.', postedAt: new Date('2026-04-08') },
+            { id: '4', title: 'Laptop Repair / Tune-up', category: 'Tech', pay: 200, location: 'Arima', description: 'Laptop running slow — diagnose and fix. May need RAM upgrade or OS reinstall.', poster: 'Chris B.', postedAt: new Date('2026-04-07') },
+            { id: '5', title: 'Leaky Pipe Fix', category: 'Handyman', pay: 250, location: 'Tunapuna', description: 'Pipe under kitchen sink leaking. Need someone with plumbing experience ASAP.', poster: 'Anita R.', postedAt: new Date('2026-04-09') },
+            { id: '6', title: 'CSEC Maths Tutoring', category: 'Tutoring', pay: 120, location: 'Diego Martin', description: 'Tutor for my Form 4 son struggling with algebra and geometry. Twice a week.', poster: 'Peter M.', postedAt: new Date('2026-04-06') },
+        ];
 
-        const auth = getAuth();
-        const db = getFirestore();
+        let allJobs = [];
+        let activeCategory = 'All';
 
-        async function loginUser(identifier, password) {
-            let emailToUse = identifier;
+        function renderJobs(jobs) {
+            let grid = document.querySelector('#jobsGrid');
+            let countEl = document.querySelector('#jobCount');
 
-            // If input is a username (no '@'), get associated email
-            if (!identifier.includes('@')) {
-                try {
-                    const userDocRef = doc(db, "usernames", identifier.toLowerCase());
-                    const userDoc = await getDoc(userDocRef);
+            countEl.textContent = jobs.length;
 
-                    if (userDoc.exists()) {
-                        emailToUse = userDoc.data().email;
-                    } else {
-                        throw new Error("Username not found.");
-                    }
-                } catch (error) {
-                    console.error("Error fetching username map:", error);
-                    return;
-                }
-            }
-
-            // Firebase Email/Password sign-in
-            signInWithEmailAndPassword(auth, emailToUse, password)
-                .then((userCredential) => {
-                    console.log("Logged in as:", userCredential.user.email);
-                    // Redirect or show success here
-                })
-                .catch((error) => {
-                    console.error("Login failed:", error.message);
-                });
-        }
-
-        const loginBtn = document.getElementById("loginBtn");
-
-        loginBtn.addEventListener("click", async () => {
-            const identifier = document.getElementById("identifier").value.trim();
-            const password = document.getElementById("password").value.trim();
-
-            if (!identifier || !password) {
-                alert("Please enter both fields.");
+            if (jobs.length === 0) {
+                grid.innerHTML = '<div class="empty-state">No jobs found. Try a different search or category.</div>';
                 return;
             }
 
-            await loginUser(identifier, password);
-        });
+            let html = '';
 
-        const identifierInput = document.getElementById("identifier");
-        const passwordInput = document.getElementById("password");
+            for (let job of jobs) {
+                let daysAgo = Math.floor((Date.now() - job.postedAt) / 86400000);
+                let timeLabel = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + 'd ago';
 
-        [identifierInput, passwordInput].forEach(input => {
-            input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") {
-                    loginBtn.click();
+                html += `
+                    <div class="job-card">
+                        <div class="card-top">
+                            <span class="category-badge">${job.category}</span>
+                            <div class="pay-amount">$${job.pay} <small>TTD</small></div>
+                        </div>
+                        <div class="job-title">${job.title}</div>
+                        <div class="job-desc">${job.description}</div>
+                        <div class="card-meta">
+                            <span>📍 ${job.location}</span>
+                            <span>🕐 ${timeLabel}</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="poster">Posted by ${job.poster}</span>
+                            <a class="view-btn" href="job-detail.html?id=${job.id}">View Details</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+
+        async function getJobs() {
+            try {
+                let q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
+                let snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    allJobs = snapshot.docs.map(function (doc) {
+                        return {
+                            id: doc.id,
+                            ...doc.data(),
+                            postedAt: doc.data().postedAt?.toDate() || new Date()
+                        };
+                    });
+                } else {
+                    allJobs = SAMPLE_JOBS;
                 }
-            });
-        });
 
-    </script> -->
+            } catch (e) {
+                console.log('Could not reach Firestore, using sample data:', e);
+                allJobs = SAMPLE_JOBS;
+            }
+
+            filterJobs();
+        }
+
+        function filterJobs() {
+            let searchVal = document.querySelector('#searchInput').value.toLowerCase();
+            let sortVal = document.querySelector('#sortSelect').value;
+
+            let filtered = allJobs.filter(function (job) {
+                let matchCategory = activeCategory === 'All' || job.category === activeCategory;
+                let matchSearch = job.title.toLowerCase().includes(searchVal)
+                    || job.category.toLowerCase().includes(searchVal)
+                    || job.location.toLowerCase().includes(searchVal);
+                return matchCategory && matchSearch;
+            });
+
+            if (sortVal === 'pay_high') {
+                filtered.sort(function (a, b) { return b.pay - a.pay; });
+            } else if (sortVal === 'pay_low') {
+                filtered.sort(function (a, b) { return a.pay - b.pay; });
+            } else {
+                filtered.sort(function (a, b) { return b.postedAt - a.postedAt; });
+            }
+
+            renderJobs(filtered);
+        }
+
+        function setCategory(cat, el) {
+            activeCategory = cat;
+            let pills = document.querySelectorAll('.categories span');
+            for (let pill of pills) {
+                pill.classList.remove('active');
+            }
+            el.classList.add('active');
+            filterJobs();
+        }
+
+        document.querySelector('#searchInput').addEventListener('keyup', filterJobs);
+
+        window.filterJobs = filterJobs;
+        window.setCategory = setCategory;
+        getJobs();
+    </script>
 </body>
 
 </html>
