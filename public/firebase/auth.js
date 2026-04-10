@@ -1,0 +1,91 @@
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+// const auth = getAuth();
+
+// export const loginUser = (email, password) => {
+//   return signInWithEmailAndPassword(auth, email, password)
+//     .then((userCredential) => {
+//       console.log("Login successful:", userCredential.user);
+//     })
+//     .catch((error) => {
+//       console.error("Login failed:", error.message);
+//     });
+// };
+
+// export async function signUpUser(email, password, username, phone, dob) {
+//   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+//   await setDoc(doc(db, "users", userCredential.user.uid), {
+//     username,
+//     email,
+//     phone,
+//     dob
+//   });
+
+//   return userCredential;
+// }
+
+import { auth, db } from "./firebaseConfig.js";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+// ======================
+// SIGN UP
+// ======================
+export async function signUpUser(email, password, username, phone, dob) {
+
+  // Check if username already exists
+  const q = query(collection(db, "users"), where("username", "==", username));
+  const existing = await getDocs(q);
+
+  if (!existing.empty) {
+    throw new Error("Username already taken");
+  }
+
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+  await setDoc(doc(db, "users", userCredential.user.uid), {
+    username,
+    email,
+    phone,
+    dob
+  });
+
+  return userCredential;
+}
+
+
+// ======================
+// LOGIN (USERNAME OR EMAIL)
+// ======================
+export async function loginUser(identifier, password) {
+
+  let email = identifier;
+
+  // If it's a username → find email
+  if (!identifier.includes("@")) {
+    const q = query(collection(db, "users"), where("username", "==", identifier));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      throw new Error("Username not found");
+    }
+
+    email = snapshot.docs[0].data().email;
+  }
+
+  return await signInWithEmailAndPassword(auth, email, password);
+}

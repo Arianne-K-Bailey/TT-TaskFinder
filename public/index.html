@@ -317,16 +317,12 @@
             <div class="nav-links" id="navLinks">
             <a href="index.html">Home</a>
             <a href="browse.html">Browse</a>
-            <a href="#">Post Task</a>
+            <a href="#">Post Job</a>
             </div>
 
             <div class="nav-actions">
-            <a href="login.html" class="login">Login</a>
-            <a href="signup.html" class="signup">Sign Up</a>
-            </div>
-
-            <div class="menu-toggle" onclick="toggleMenu()">
-            ☰
+                <a href="Login.html?mode=login" class="login">Login</a>
+                <a href="Login.html?mode=signup" class="signup">Sign Up</a>
             </div>
 
         </div>
@@ -426,156 +422,35 @@
     </footer>
 
     <script type="module">
-        import { loginUser } from "./auth.js";
+        import { db } from "./firebase/firebaseConfig.js";
 
-        const loginBtn = document.getElementById("loginBtn");
-
-        loginBtn.addEventListener("click", async () => {
-            const identifier = document.getElementById("identifier").value.trim();
-            const password = document.getElementById("password").value.trim();
-
-            if (!identifier || !password) {
-                alert("Please enter both fields.");
-                return;
-            }
-
-            try {
-                const userCredential = await loginUser(identifier, password);
-                console.log("Logged in as:", userCredential.user.email);
-
-                window.location.href = "dashboard.html";
-            } catch (error) {
-                console.error(error.message);
-                alert(error.message);
-            }
-        });
-
-        const SAMPLE_JOBS = [
-            { id: '1', title: 'Deep Clean House', category: 'Cleaning', pay: 300, location: 'Port of Spain', description: 'Need a thorough deep clean of a 3-bedroom house. All supplies provided.', poster: 'Maria J.', postedAt: new Date('2026-04-09') },
-            { id: '2', title: 'Grocery Delivery Run', category: 'Delivery', pay: 80, location: 'San Fernando', description: 'Pick up groceries from Massy and deliver to my address. Receipt reimbursed.', poster: 'Devon A.', postedAt: new Date('2026-04-08') },
-            { id: '3', title: 'Lawn Mowing & Trim', category: 'Gardening', pay: 150, location: 'Chaguanas', description: 'Mow front and back yard, trim hedges and clear drain. About 2 hours of work.', poster: 'Rashida S.', postedAt: new Date('2026-04-08') },
-            { id: '4', title: 'Laptop Repair / Tune-up', category: 'Tech', pay: 200, location: 'Arima', description: 'Laptop running slow — diagnose and fix. May need RAM upgrade or OS reinstall.', poster: 'Chris B.', postedAt: new Date('2026-04-07') },
-            { id: '5', title: 'Leaky Pipe Fix', category: 'Handyman', pay: 250, location: 'Tunapuna', description: 'Pipe under kitchen sink leaking. Need someone with plumbing experience ASAP.', poster: 'Anita R.', postedAt: new Date('2026-04-09') },
-            { id: '6', title: 'CSEC Maths Tutoring', category: 'Tutoring', pay: 120, location: 'Diego Martin', description: 'Tutor for my Form 4 son struggling with algebra and geometry. Twice a week.', poster: 'Peter M.', postedAt: new Date('2026-04-06') },
-        ];
+        import {
+            collection,
+            query,
+            getDocs,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         let allJobs = [];
-        let activeCategory = 'All';
-
-        function renderJobs(jobs) {
-            let grid = document.querySelector('#jobsGrid');
-            let countEl = document.querySelector('#jobCount');
-
-            countEl.textContent = jobs.length;
-
-            if (jobs.length === 0) {
-                grid.innerHTML = '<div class="empty-state">No jobs found. Try a different search or category.</div>';
-                return;
-            }
-
-            let html = '';
-
-            for (let job of jobs) {
-                let daysAgo = Math.floor((Date.now() - job.postedAt) / 86400000);
-                let timeLabel = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + 'd ago';
-
-                html += `
-                    <div class="job-card">
-                        <div class="card-top">
-                            <span class="category-badge">${job.category}</span>
-                            <div class="pay-amount">$${job.pay} <small>TTD</small></div>
-                        </div>
-                        <div class="job-title">${job.title}</div>
-                        <div class="job-desc">${job.description}</div>
-                        <div class="card-meta">
-                            <span>📍 ${job.location}</span>
-                            <span>🕐 ${timeLabel}</span>
-                        </div>
-                        <div class="card-footer">
-                            <span class="poster">Posted by ${job.poster}</span>
-                            <a class="view-btn" href="job-detail.html?id=${job.id}">View Details</a>
-                        </div>
-                    </div>
-                `;
-            }
-
-            grid.innerHTML = html;
-        }
-
-        /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-
-        /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
-        }
 
         async function getJobs() {
             try {
-                let q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
-                let snapshot = await getDocs(q);
+            const q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
+            const snapshot = await getDocs(q);
 
-                if (!snapshot.empty) {
-                    allJobs = snapshot.docs.map(function (doc) {
-                        return {
-                            id: doc.id,
-                            ...doc.data(),
-                            postedAt: doc.data().postedAt?.toDate() || new Date()
-                        };
-                    });
-                } else {
-                    allJobs = SAMPLE_JOBS;
-                }
+            allJobs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                postedAt: doc.data().postedAt?.toDate() || new Date()
+            }));
+
+            console.log("Jobs loaded:", allJobs);
 
             } catch (e) {
-                console.log('Could not reach Firestore, using sample data:', e);
-                allJobs = SAMPLE_JOBS;
+            console.error("Error loading jobs:", e);
             }
-
-            filterJobs();
         }
 
-        function filterJobs() {
-            let searchVal = document.querySelector('#searchInput').value.toLowerCase();
-            let sortVal = document.querySelector('#sortSelect').value;
-
-            let filtered = allJobs.filter(function (job) {
-                let matchCategory = activeCategory === 'All' || job.category === activeCategory;
-                let matchSearch = job.title.toLowerCase().includes(searchVal)
-                    || job.category.toLowerCase().includes(searchVal)
-                    || job.location.toLowerCase().includes(searchVal);
-                return matchCategory && matchSearch;
-            });
-
-            if (sortVal === 'pay_high') {
-                filtered.sort(function (a, b) { return b.pay - a.pay; });
-            } else if (sortVal === 'pay_low') {
-                filtered.sort(function (a, b) { return a.pay - b.pay; });
-            } else {
-                filtered.sort(function (a, b) { return b.postedAt - a.postedAt; });
-            }
-
-            renderJobs(filtered);
-        }
-
-        function setCategory(cat, el) {
-            activeCategory = cat;
-            let pills = document.querySelectorAll('.categories span');
-            for (let pill of pills) {
-                pill.classList.remove('active');
-            }
-            el.classList.add('active');
-            filterJobs();
-        }
-
-        document.querySelector('#searchInput').addEventListener('keyup', filterJobs);
-
-        window.filterJobs = filterJobs;
-        window.setCategory = setCategory;
         getJobs();
     </script>
 </body>

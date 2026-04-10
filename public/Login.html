@@ -22,13 +22,19 @@
           <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
           <a href="#" class="icon"><i class='bx bxl-github'></i></a>
         </div>
-        <samp>or use your email for registration</samp>
-        <input type="text" placeholder="Name" />
+        <span>or use your email for registration</span>
+        <!-- <input type="text" placeholder="Username" />
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
         <input type="text" placeholder="Phone Number" />
         <input type="text" placeholder="Date of Birth (dd/mm/yyyy)" />
-        <button>Sign Up</button>
+        <button>Sign Up</button> -->
+        <input id="signupUsername" type="text" placeholder="Username" />
+        <input id="signupEmail" type="email" placeholder="Email" />
+        <input id="signupPassword" type="password" placeholder="Password" />
+        <input id="signupPhone" type="text" placeholder="Phone Number" />
+        <input id="signupDOB" type="text" placeholder="Date of Birth (dd/mm/yyyy)" />
+        <button type="button" id="signupBtn">Sign Up</button>
       </form>
     </div>
 
@@ -41,10 +47,12 @@
           <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
           <a href="#" class="icon"><i class='bx bxl-github'></i></a>
         </div>
-        <samp>or use your email and password</samp>
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <button>Login</button>
+        <span>or use your email and password</span>
+        <!-- <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" /> -->
+        <input id="identifier" type="text" placeholder="Email or Username" />
+        <input id="loginPassword" type="password" placeholder="Password" />
+        <button type="button" id="loginBtn">Login</button>
       </form>
     </div>
 
@@ -64,19 +72,94 @@
     </div>
   </div>
 
-  <script>
-    const container = document.getElementById('container');
-    const signUpButton = document.getElementById('signUp');
-    const loginButton = document.getElementById('login');
+  <script type="module">
+    import { signUpUser, loginUser } from "./firebase/auth.js"; //./auth.js
 
-    signUpButton.addEventListener('click', () => {
+    // =========================
+    // TOGGLE (UI ONLY)
+    // =========================
+    const container = document.getElementById('container');
+    const signUpSwitch = document.getElementById('signUp');
+    const loginSwitch = document.getElementById('login');
+
+    signUpSwitch.addEventListener('click', () => {
       container.classList.add("active");
     });
 
-    loginButton.addEventListener('click', () => {
+    loginSwitch.addEventListener('click', () => {
       container.classList.remove("active");
     });
-</script>
 
+    // =========================
+    // AUTO SWITCH BASED ON URL
+    // =========================
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+
+    if (mode === "signup") {
+      container.classList.add("active");
+    } else {
+      container.classList.remove("active");
+    }
+
+    // =========================
+    // SIGN UP
+    // =========================
+    const signupBtn = document.getElementById("signupBtn");
+
+    signupBtn.addEventListener("click", async () => {
+      const username = document.getElementById("signupUsername").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      const phone = document.getElementById("signupPhone").value.trim();
+      const dob = document.getElementById("signupDOB").value.trim();
+
+      if (!username || !email || !password) {
+        alert("Please fill in required fields");
+        return;
+      }
+
+      try {
+        await signUpUser(email, password, username, phone, dob);
+        alert("Account created successfully!");
+
+        // Redirect after signup
+        window.location.href = "dashboard.html";
+
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    });
+
+    // =========================
+    // LOGIN (USERNAME OR EMAIL)
+    // =========================
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.addEventListener("click", async () => {
+    const identifier = document.getElementById("identifier").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!identifier || !password) {
+      alert("Enter email/username and password");
+      return;
+    }
+
+    try {
+      await loginUser(identifier, password);
+      alert("Logged in successfully!");
+
+      // Redirect after login
+      window.location.href = "dashboard.html";
+
+    }catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+    });
+
+    window.history.replaceState({}, document.title, "Login.html");
+  </script>
 </body>
 </html>
