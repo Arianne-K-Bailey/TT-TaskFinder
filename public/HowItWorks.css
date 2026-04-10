@@ -1,0 +1,93 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.header {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.header p {
+  color: #64748b;
+  max-width: 600px;
+  margin: auto;
+}
+
+.section {
+  margin-bottom: 60px;
+}
+
+.section h2 {
+  margin-bottom: 25px;
+}
+
+.step {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.number {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.red {
+  background: #dc2626;
+  color: white;
+}
+
+.dark {
+  background: #111;
+  color: white;
+}
+
+.step h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.step p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.safety {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.safety-grid {
+  display: grid;
+  gap: 25px;
+  margin-top: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.safety-item {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}

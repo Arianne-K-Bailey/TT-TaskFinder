@@ -1,140 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TT Taskfinder – Profile</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="profile.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile - TT TaskFinder</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="profile.css">
+
 </head>
+
 <body>
- 
-  <div class="nav-wrapper">
-    <nav>
-      <ul class="nav-links">
-        <li><a href="#index.html">Home</a></li>
-        <li><a href="#aboutus.html">About</a></li>
-        <li><a href="#jobs.html">Browse Jobs</a></li>
-        <li><a href="#taskee.html">Post a Job</a></li>
-      </ul>
-    </nav>
-  </div>
- 
-  <div class="page">
- 
-    <div class="profile-card">
-      <div class="profile-avatar-wrap">
-        <img
-          class="profile-avatar"
-          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80"
-          alt="Profile picture"
-        />
-        <div class="avatar-edit">📷</div>
-      </div>
-      <div class="profile-card-body">
-        <div class="profile-username"><span>@</span>john_doe</div>
-        <span class="profile-role">Job Seeker</span>
-        <div class="profile-stats">
-          <div class="p-stat">
-            <strong>12</strong>
-            <span>Applied</span>
-          </div>
-          <div class="p-stat">
-            <strong>3</strong>
-            <span>Saved</span>
-          </div>
-          <div class="p-stat">
-            <strong>1</strong>
-            <span>Hired</span>
-          </div>
-        </div>
-        <button class="btn-edit-profile">Edit Profile</button>
-      </div>
+
+<div class="container">
+
+  <div class="header">
+    <div>
+      <h1>My Profile</h1>
+      <p style="margin:0;color:#64748b;">Manage your account and activity</p>
     </div>
- 
-    <div class="profile-info">
-      <div class="info-header">
-        <div>
-          <span class="info-eyebrow">Account Details</span>
-          <h2>My Profile</h2>
-        </div>
-      </div>
- 
-      <div class="info-panel">
-        <div class="info-panel-header">
-          <div class="panel-dot"></div>
-          <span>Personal Information</span>
-        </div>
- 
-        <div class="field-row">
-          <span class="field-label">Username</span>
-          <span class="field-value username-val">@john_doe</span>
-        </div>
- 
-        <div class="field-row">
-          <span class="field-label">Full Name</span>
-          <span class="field-value">John Daniel Doe</span>
-        </div>
- 
-        <div class="field-row">
-          <span class="field-label">Date of Birth</span>
-          <span class="field-value">14 March 1998</span>
-        </div>
- 
-        <div class="field-row">
-          <span class="field-label">Email Address</span>
-          <span class="field-value">johndoe@email.com</span>
-        </div>
- 
-        <div class="field-row">
-          <span class="field-label">Phone Number</span>
-          <span class="field-value">+1 (868) 123-4567</span>
-        </div>
-      </div>
+
+    <div class="toggle">
+      <button id="workerBtn" class="active" onclick="setMode('worker')">Taskee</button>
+      <button id="clientBtn" onclick="setMode('client')">Tasker</button>
     </div>
- 
   </div>
-  <script>
-        async function loadAppliedJobs() {
-          const grid = document.getElementById('jobs-grid');
- 
-          try {
-            const response = await fetch('https://your-api.com/applied-jobs');
-            const jobs = await response.json();
- 
-            if (jobs.length === 0) {
-              grid.innerHTML = '<p class="no-jobs">No applications yet.</p>';
-              return;
-            }
- 
-            jobs.forEach(job => {
-              grid.innerHTML += `
-                <div class="job-card">
-                  <div class="job-card-top">
-                    <span class="job-company">${job.company}</span>
-                    <span class="job-status ${job.status}">${job.status}</span>
-                  </div>
-                  <div class="job-card-body">
-                    <div class="job-title">${job.title}</div>
-                    <div class="job-meta">
-                      <span class="job-tag">${job.type}</span>
-                      <span class="job-tag">${job.location}</span>
-                      <span class="job-tag">${job.category}</span>
-                    </div>
-                    <div class="job-date">Applied: ${job.date}</div>
-                  </div>
-                </div>
-              `;
-            });
- 
-          } catch (error) {
-            grid.innerHTML = '<p class="no-jobs">Failed to load applications. Please try again.</p>';
-            console.error('Error loading jobs:', error);
-          }
-        }
- 
-        loadAppliedJobs();
-      </script>
- 
+
+  <div class="grid">
+
+    <div class="card center">
+      <div class="avatar">👤</div>
+      <h3>John Martinez</h3>
+      <p style="color:#64748b;">john.martinez@email.com</p>
+
+      <p>⭐ 4.8 • 47 jobs completed</p>
+
+      <hr>
+
+      <p><strong>Location:</strong> Port of Spain</p>
+      <p><strong>Phone:</strong> +1 (868) 555-0123</p>
+
+      <hr>
+
+      <h4>Skills</h4>
+      <p>Lawn Care • Repairs • Cleaning • Tech Support</p>
+
+      <button class="btn" style="width:100%;">Edit Profile</button>
+    </div>
+
+    <div class="card">
+
+      <div class="tabs">
+        <button id="tab1" class="active" onclick="showTab('main')">Main</button>
+        <button id="tab2" onclick="showTab('saved')">Saved</button>
+      </div>
+
+      <div id="workerView">
+
+        <div id="main">
+
+          <div class="item">
+            <strong>Lawn Mowing</strong>
+            <span class="badge yellow">Pending</span>
+            <p>Port of Spain • TTD $250</p>
+          </div>
+
+          <div class="item">
+            <strong>Computer Repair</strong>
+            <span class="badge blue">Accepted</span>
+            <p>Arima • TTD $350</p>
+          </div>
+
+          <div class="item">
+            <strong>AC Maintenance</strong>
+            <span class="badge green">Completed</span>
+            <p>San Fernando • TTD $320</p>
+          </div>
+
+        </div>
+
+        <div id="saved" style="display:none;">
+          <p>No saved tasks yet.</p>
+        </div>
+
+      </div>
+
+      <div id="clientView" style="display:none;">
+
+        <div class="item">
+          <strong>Pool Cleaning</strong>
+          <span class="badge yellow">Active</span>
+          <p>5 applications • TTD $400</p>
+        </div>
+
+        <div class="item">
+          <strong>Security Cameras</strong>
+          <span class="badge blue">In Progress</span>
+          <p>8 applications • TTD $800</p>
+        </div>
+
+        <div class="item">
+          <strong>Cabinet Repair</strong>
+          <span class="badge green">Completed</span>
+          <p>12 applications • TTD $600</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+let mode = "worker";
+
+function setMode(m) {
+  mode = m;
+
+  document.getElementById("workerBtn").classList.remove("active");
+  document.getElementById("clientBtn").classList.remove("active");
+
+  document.getElementById(m + "Btn").classList.add("active");
+
+  document.getElementById("workerView").style.display = m === "worker" ? "block" : "none";
+  document.getElementById("clientView").style.display = m === "client" ? "block" : "none";
+}
+
+function showTab(tab) {
+  document.getElementById("main").style.display = tab === "main" ? "block" : "none";
+  document.getElementById("saved").style.display = tab === "saved" ? "block" : "none";
+
+  document.getElementById("tab1").classList.toggle("active", tab === "main");
+  document.getElementById("tab2").classList.toggle("active", tab === "saved");
+}
+</script>
+
 </body>
 </html>
