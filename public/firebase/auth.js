@@ -1,18 +1,33 @@
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import { auth, db } from "./firebaseConfig.js";
 
-// const auth = getAuth();
+// import {
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword
+// } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// export const loginUser = (email, password) => {
-//   return signInWithEmailAndPassword(auth, email, password)
-//     .then((userCredential) => {
-//       console.log("Login successful:", userCredential.user);
-//     })
-//     .catch((error) => {
-//       console.error("Login failed:", error.message);
-//     });
-// };
+// import {
+//   doc,
+//   setDoc,
+//   collection,
+//   query,
+//   where,
+//   getDocs
+// } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+
+// // ======================
+// // SIGN UP
+// // ======================
 // export async function signUpUser(email, password, username, phone, dob) {
+
+//   // Check if username already exists
+//   const q = query(collection(db, "users"), where("username", "==", username));
+//   const existing = await getDocs(q);
+
+//   if (!existing.empty) {
+//     throw new Error("Username already taken");
+//   }
+
 //   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
 //   await setDoc(doc(db, "users", userCredential.user.uid), {
@@ -25,6 +40,32 @@
 //   return userCredential;
 // }
 
+
+// // =========================
+// // LOGIN (USERNAME OR EMAIL)
+// // =========================
+// export async function loginUser(identifier, password) {
+
+//   let email = identifier;
+
+//   // If it's a username → find email
+//   if (!identifier.includes("@")) {
+//     const q = query(collection(db, "users"), where("username", "==", identifier));
+//     const snapshot = await getDocs(q);
+
+//     if (snapshot.empty) {
+//       throw new Error("Username not found");
+//     }
+
+//     email = snapshot.docs[0].data().email;
+//   }
+
+//   return await signInWithEmailAndPassword(auth, email, password);
+// }
+
+// ======================
+// IMPORTS
+// ======================
 import { auth, db } from "./firebaseConfig.js";
 
 import {
@@ -46,6 +87,8 @@ import {
 // SIGN UP
 // ======================
 export async function signUpUser(email, password, username, phone, dob) {
+  // Normalize username
+  username = username.toLowerCase();
 
   // Check if username already exists
   const q = query(collection(db, "users"), where("username", "==", username));
@@ -55,13 +98,16 @@ export async function signUpUser(email, password, username, phone, dob) {
     throw new Error("Username already taken");
   }
 
+  // Create Firebase Auth user
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
+  // Save extra user info in Firestore
   await setDoc(doc(db, "users", userCredential.user.uid), {
     username,
     email,
     phone,
-    dob
+    dob,
+    createdAt: new Date()
   });
 
   return userCredential;
@@ -69,15 +115,18 @@ export async function signUpUser(email, password, username, phone, dob) {
 
 
 // ======================
-// LOGIN (USERNAME OR EMAIL)
+// LOGIN (EMAIL OR USERNAME)
 // ======================
 export async function loginUser(identifier, password) {
-
   let email = identifier;
 
-  // If it's a username → find email
+  // If it's a username → find email in Firestore
   if (!identifier.includes("@")) {
-    const q = query(collection(db, "users"), where("username", "==", identifier));
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", identifier.toLowerCase())
+    );
+
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -87,5 +136,6 @@ export async function loginUser(identifier, password) {
     email = snapshot.docs[0].data().email;
   }
 
+  // Login with email
   return await signInWithEmailAndPassword(auth, email, password);
 }
