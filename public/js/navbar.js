@@ -1,43 +1,43 @@
-import { auth } from "../firebase/firebaseConfig.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// import { auth } from "../firebase/firebaseConfig.js";
+// import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-export function loadNavbar() {
-  const navTarget = document.getElementById("navbar");
+// export function loadNavbar() {
+//   const navTarget = document.getElementById("navbar");
 
-  fetch("./components/navbar.html")
-    .then(res => res.text())
-    .then(html => {
-      navTarget.innerHTML = html;
+//   fetch("./components/navbar.html")
+//     .then(res => res.text())
+//     .then(html => {
+//       navTarget.innerHTML = html;
       
-      // Dispatch a custom event to signal the Navbar is ready
-      window.dispatchEvent(new Event('navbarLoaded'));
-    });
-}
+//       // Dispatch a custom event to signal the Navbar is ready
+//       window.dispatchEvent(new Event('navbarLoaded'));
+//     });
+// }
 
-// Separate the listener entirely
-window.addEventListener('navbarLoaded', () => {
-  const navAuth = document.getElementById("navAuth");
+// // Separate the listener entirely
+// window.addEventListener('navbarLoaded', () => {
+//   const navAuth = document.getElementById("navAuth");
   
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      navAuth.innerHTML = `
-        <a href="profile.html" class="login">👤 ${user.email.split("@")[0]}</a>
-        <a href="#" id="logoutBtn" class="signup">Logout</a>
-      `;
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       navAuth.innerHTML = `
+//         <a href="profile.html" class="login">👤 ${user.email.split("@")[0]}</a>
+//         <a href="#" id="logoutBtn" class="signup">Logout</a>
+//       `;
       
-      document.getElementById("logoutBtn").onclick = async (e) => {
-        e.preventDefault();
-        await signOut(auth);
-        location.reload();
-      };
-    } else {
-      navAuth.innerHTML = `
-        <a href="Login.html?mode=login" class="login">Login</a>
-        <a href="Login.html?mode=signup" class="signup">Sign Up</a>
-      `;
-    }
-  });
-});
+//       document.getElementById("logoutBtn").onclick = async (e) => {
+//         e.preventDefault();
+//         await signOut(auth);
+//         location.reload();
+//       };
+//     } else {
+//       navAuth.innerHTML = `
+//         <a href="Login.html?mode=login" class="login">Login</a>
+//         <a href="Login.html?mode=signup" class="signup">Sign Up</a>
+//       `;
+//     }
+//   });
+// });
 
 // import { auth, db } from "../firebase/firebaseConfig.js";
 // import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -213,39 +213,39 @@ window.addEventListener('navbarLoaded', () => {
 // }
 
 
-// import { auth } from "../firebase/firebaseConfig.js";
-// import { onAuthStateChanged, signOut } 
-// from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { auth } from "../firebase/firebaseConfig.js";
+import { onAuthStateChanged, signOut } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// // const navTarget = document.getElementById("navbar");
+// const navTarget = document.getElementById("navbar");
 
-// export function loadNavbar() {
-//   const navTarget = document.getElementById("navbar");
-//   fetch("/components/navbar.html")
-//     .then(res => res.text())
-//     .then(html => {
-//       navTarget.innerHTML = html;
+export function loadNavbar() {
+  const navTarget = document.getElementById("navbar");
+  fetch("./components/navbar.html")
+    .then(res => res.text())
+    .then(html => {
+      navTarget.innerHTML = html;
 
-//       const navAuth = document.getElementById("navAuth");
+      const navAuth = document.getElementById("navAuth");
 
-//       onAuthStateChanged(auth, (user) => {
-//         if (user) {
-//           navAuth.innerHTML = `
-//             <a href="profile.html">👤 ${user.email.split("@")[0]}</a>
-//             <a href="#" id="logoutBtn" class="action-btn">Logout</a>
-//           `;
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          navAuth.innerHTML = `
+            <a href="profile.html">👤 ${user.email.split("@")[0]}</a>
+            <a href="#" id="logoutBtn" class="action-btn">Logout</a>
+          `;
 
-//           document.getElementById("logoutBtn").onclick = async () => {
-//             await signOut(auth);
-//             location.reload();
-//           };
+          document.getElementById("logoutBtn").onclick = async () => {
+            await signOut(auth);
+            location.reload();
+          };
 
-//         } else {
-//           navAuth.innerHTML = `
-//             <a href="Login.html?mode=login" class="login">Login</a>
-//             <a href="Login.html?mode=signup" class="action-btn">Sign Up</a>
-//           `;
-//         }
-//       });
-//     });
-// }
+        } else {
+          navAuth.innerHTML = `
+            <a href="Login.html?mode=login" class="login">Login</a>
+            <a href="Login.html?mode=signup" class="action-btn">Sign Up</a>
+          `;
+        }
+      });
+    });
+}

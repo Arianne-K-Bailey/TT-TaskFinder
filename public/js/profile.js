@@ -80,18 +80,6 @@ async function loadTaskeeJobs(uid) {
   });
 
   container.innerHTML = html;
-
-  // snap.forEach(doc => {
-  //   const job = doc.data();
-
-  //   container.innerHTML += `
-  //     <div class="item">
-  //       <strong>${job.title}</strong>
-  //       <span class="badge yellow">${job.status}</span>
-  //       <p>${job.location} • TTD $${job.pay}</p>
-  //     </div>
-  //   `;
-  // });
 }
 
 
