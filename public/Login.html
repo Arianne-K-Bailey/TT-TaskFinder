@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TT TaskFinder Login | Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="Login.css">
+  
+</head>
+
+<body>
+
+  <div class="container" id="container">
+    <div class="form-container sign-up">
+      <form action="#">
+        <h1>🛠️Create Account</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class='bx bxl-facebook'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-google'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-github'></i></a>
+        </div>
+        <samp>or use your email for registration</samp>
+        <input type="text" placeholder="Name" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <input type="text" placeholder="Phone Number" />
+        <input type="text" placeholder="Date of Birth (dd/mm/yyyy)" />
+        <button>Sign Up</button>
+      </form>
+    </div>
+
+    <div class="form-container login">
+      <form action="#">
+        <h1>🛠️Login</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class='bx bxl-facebook'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-google'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-github'></i></a>
+        </div>
+        <samp>or use your email and password</samp>
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <button>Login</button>
+      </form>
+    </div>
+
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class ="toggle-panel toggle-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button class="hidden" id="login">Login</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start journey with us</p>
+          <button class="hidden" id="signUp">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const signUpButton = document.getElementById('signUp');
+    const loginButton = document.getElementById('login');
+
+    signUpButton.addEventListener('click', () => {
+      container.classList.add("active");
+    });
+
+    loginButton.addEventListener('click', () => {
+      container.classList.remove("active");
+    });
+</script>
+
+</body>
+</html>
