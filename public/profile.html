@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile - TT TaskFinder</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="profile.css">
-<link rel="stylesheet2" href="./components/navbar.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - TT TaskFinder</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="/public/components/navbar.css">
 </head>
 
 <body>
@@ -85,179 +86,15 @@
   </div>
 
   <script type="module">
-    import { loadNavbar } from "./js/navbar.js";
+    import { loadNavbar } from "/public/js/navbar.js";
 
     window.addEventListener("DOMContentLoaded", () => {
       loadNavbar();
     });
   </script>
 
-  <!-- <script type="module">
-    import { loadNavbar } from "./js/navbar.js";
-    loadNavbar();
-  </script> -->
-
   <script type="module" src="./js/profile.js"></script>
 
 </body>
+
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile - TT TaskFinder</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="profile.css">
-
-</head>
-
-<body>
-
-<div class="container">
-
-  <div class="header">
-    <div>
-      <h1>My Profile</h1>
-      <p style="margin:0;color:#64748b;">Manage your account and activity</p>
-    </div>
-
-    <div class="toggle">
-      <button id="workerBtn" class="active" onclick="setMode('worker')">Taskee</button>
-      <button id="clientBtn" onclick="setMode('client')">Tasker</button>
-    </div>
-  </div>
-
-  <div class="grid">
-
-    <div class="card center">
-      <div class="avatar">👤</div>
-      
-      <h3 id="username">Loading...</h3>
-
-      <p id="email">Loading...</p>
-
-      <p>⭐ 4.8 • 47 jobs completed</p>
-
-      <hr>
-
-      <!-- <p><strong>Location:</strong> Port of Spain</p> -->
-      <!-- <p id="phone"></p>
-
-      <hr>
-
-      <h4>Skills</h4>
-      <p>Lawn Care • Repairs • Cleaning • Tech Support</p>
-
-      <button class="btn" style="width:100%;">Edit Profile</button>
-    </div>
-
-    <div class="card">
-
-      <div class="tabs">
-        <button id="tab1" class="active" onclick="showTab('main')">Main</button>
-        <button id="tab2" onclick="showTab('saved')">Saved</button>
-      </div>
-
-      <div id="workerView">
-
-        <div id="main">
-
-          <div class="item">
-            <strong>Lawn Mowing</strong>
-            <span class="badge yellow">Pending</span>
-            <p>Port of Spain • TTD $250</p>
-          </div>
-
-          <div class="item">
-            <strong>Computer Repair</strong>
-            <span class="badge blue">Accepted</span>
-            <p>Arima • TTD $350</p>
-          </div>
-
-          <div class="item">
-            <strong>AC Maintenance</strong>
-            <span class="badge green">Completed</span>
-            <p>San Fernando • TTD $320</p>
-          </div>
-
-        </div>
-
-        <div id="saved" style="display:none;">
-          <p>No saved tasks yet.</p>
-        </div>
-
-      </div>
-
-      <div id="clientView" style="display:none;">
-
-        <div class="item">
-          <strong>Pool Cleaning</strong>
-          <span class="badge yellow">Active</span>
-          <p>5 applications • TTD $400</p>
-        </div>
-
-        <div class="item">
-          <strong>Security Cameras</strong>
-          <span class="badge blue">In Progress</span>
-          <p>8 applications • TTD $800</p>
-        </div>
-
-        <div class="item">
-          <strong>Cabinet Repair</strong>
-          <span class="badge green">Completed</span>
-          <p>12 applications • TTD $600</p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<script type="module">
-  import { auth, db } from "./firebase/firebaseConfig.js";
-
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  window.addEventListener("DOMContentLoaded", () => {
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "Login.html";
-        return;
-      }
-
-      console.log("Logged in UID:", user.uid);
-
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (!userSnap.exists()) {
-          console.error("No user profile found in Firestore");
-          return;
-        }
-
-        const data = userSnap.data();
-
-        document.getElementById("username").textContent = data.username || "No Username";
-        document.getElementById("email").textContent = data.email || "No Email";
-
-        document.getElementById("phone").textContent =
-          data.phone ? `📞 ${data.phone}` : "📞 Not provided";
-
-        console.log("User data loaded:", data);
-
-      } catch (error) {
-        console.error("Error loading profile:", error);
-      }
-    });
-  });
-</script>
-
-</body>
-</html> -->
