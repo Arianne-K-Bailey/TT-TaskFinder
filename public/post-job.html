@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Job</title>
+
+</head>
+
+<body>
+
+  <main class="container">
+    <header class="header">
+      <p class="eyebrow">Got a task?</p>
+      <h1>Post a Job</h1>
+      <p class="sub">Fill in the details and publish instantly.</p>
+    </header>
+
+    <form id="jobForm" novalidate>
+
+      <div class="field">
+        <label for="title">Job Title</label>
+        <input id="title" type="text" maxlength="80" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description"></textarea>
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">Select a category</option>
+          <option>Cleaning</option>
+          <option>Delivery</option>
+          <option>Gardening</option>
+          <option>Tech</option>
+          <option>Handyman</option>
+          <option>Tutoring</option>
+          <option>Other</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="pay">Pay (TTD)</label>
+        <input id="pay" type="number" min="1" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" type="text" maxlength="80" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="name">Your Name</label>
+        <input id="name" type="text" maxlength="50" />
+        <small class="error"></small>
+      </div>
+
+      <button type="submit" id="submitBtn">Post Job</button>
+
+      <p id="formStatus" class="status"></p>
+
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById("jobForm");
+    const statusText = document.getElementById("formStatus");
+    const btn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      clearErrors();
+      statusText.textContent = "";
+
+      const data = {
+        title: getValue("title"),
+        description: getValue("description"),
+        category: getValue("category"),
+        pay: getValue("pay"),
+        location: getValue("location"),
+        name: getValue("name"),
+      };
+
+      const isValid = validate(data);
+      if (!isValid) return;
+
+      btn.disabled = true;
+      btn.textContent = "Posting...";
+
+      try {
+        // simulate API call
+        await new Promise(res => setTimeout(res, 1200));
+
+        statusText.textContent = "✅ Job posted successfully.";
+        form.reset();
+
+      } catch {
+        statusText.textContent = "❌ Something went wrong.";
+      }
+
+      btn.disabled = false;
+      btn.textContent = "Post Job";
+    });
+
+    function getValue(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function setError(id, message) {
+      document.querySelector(`#${id} + .error`).textContent = message;
+    }
+
+    function clearErrors() {
+      document.querySelectorAll(".error").forEach(e => e.textContent = "");
+    }
+
+    function validate(data) {
+      let valid = true;
+
+      if (!data.title) {
+        setError("title", "Required");
+        valid = false;
+      }
+
+      if (!data.description) {
+        setError("description", "Required");
+        valid = false;
+      }
+
+      if (!data.category) {
+        setError("category", "Select one");
+        valid = false;
+      }
+
+      if (!data.pay || isNaN(data.pay) || Number(data.pay) <= 0) {
+        setError("pay", "Invalid amount");
+        valid = false;
+      }
+
+      if (!data.location) {
+        setError("location", "Required");
+        valid = false;
+      }
+
+      if (!data.name) {
+        setError("name", "Required");
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
+
+</body>
+</html>
