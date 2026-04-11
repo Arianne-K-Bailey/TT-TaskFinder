@@ -29,6 +29,7 @@ loadNavbar();
 let allJobs = [];
 let activeCategory = "All";
 let currentUser = null;
+let activeSearch = "";
 
 let appliedJobs = new Set();
 let savedJobs = new Set();
@@ -44,7 +45,7 @@ onAuthStateChanged(auth, async (user) => {
         await loadUserData(); // load saved + applied
     }
 
-    renderJobs(allJobs);
+    filterJobs();
 });
 
 
@@ -63,7 +64,6 @@ function normalizeJob(job) {
         postedAt: job.postedAt || job.createdAt || new Date()
     };
 }
-
 
 // ======================
 // RENDER JOBS
@@ -221,9 +221,12 @@ async function getJobs() {
 // FILTER + SORT
 // ======================
 function filterJobs() {
+    const searchVal = (activeSearch || "").toLowerCase();
 
-    const searchVal = document.getElementById("searchInput").value.toLowerCase();
-    const sortVal = document.getElementById("sortSelect").value;
+    const sortVal = document.getElementById("sortSelect")?.value || "newest";
+
+    // const searchVal = document.getElementById("searchInput").value.toLowerCase();
+    // const sortVal = document.getElementById("sortSelect").value;
 
     let filtered = allJobs.filter(job => {
 
@@ -430,17 +433,6 @@ window.closeJobModal = function () {
     modal.classList.add("hidden");
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-
-    const modal = document.getElementById("jobModal");
-
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            closeJobModal();
-        }
-    });
-
-});
 
 // ======================
 // REDIRECT LOGIN
@@ -451,10 +443,26 @@ function redirectToLogin() {
 
 
 // ======================
-// EVENTS
+// REDIRECT HOME SEARCH
 // ======================
-document.getElementById("searchInput")
-    .addEventListener("keyup", filterJobs);
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+function applyUrlSearch() {
+    const query = getQueryParam("q");
+
+    if (query) {
+        const input = document.getElementById("searchInput");
+
+        if (input) input.value = query;
+
+        activeSearch = query;
+
+        filterJobs();
+    }
+}
 
 
 // =========================
@@ -472,4 +480,31 @@ window.unsaveJob = unsaveJob;
 // ======================
 // START
 // ======================
-getJobs();
+async function startBrowsePage() {
+    const input = document.getElementById("searchInput");
+
+    // Apply query first
+    const query = new URLSearchParams(window.location.search).get("q");
+    if (query) {
+        if (input) input.value = query;
+        activeSearch = query;
+    }
+
+    // Then load jobs and filter
+    await getJobs(); 
+
+    // Setup input listener
+    if (input) {
+        input.addEventListener("input", () => {
+            activeSearch = input.value.trim();
+            filterJobs();
+        });
+    }
+
+    const sortSelect = document.getElementById("sortSelect");
+    if (sortSelect) {
+        sortSelect.addEventListener("change", filterJobs);
+    }
+}
+
+startBrowsePage();

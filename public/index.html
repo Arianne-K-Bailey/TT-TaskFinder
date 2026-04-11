@@ -20,7 +20,7 @@
 
         body {
             margin: 0;
-            padding-top: 68px; 
+            padding-top: 68px;
             font-family: 'Segoe UI', sans-serif;
             color: #1e293b;
             background: #f8fafc;
@@ -49,6 +49,27 @@
         .hero p {
             color: #fee2e2;
             margin-bottom: 30px;
+        }
+
+        .hero-notice {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-notice p {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #fee2e2;
+            max-width: 600px;
+        }
+
+        .hero-notice a {
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
         }
 
         .search-box {
@@ -135,6 +156,34 @@
             color: #fee2e2;
         }
 
+        .how-it-works-cta {
+            margin-top: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .how-it-works-cta p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+
+        .how-link {
+            font-weight: bold;
+            color: #dc2626;
+            text-decoration: none;
+        }
+
+        .how-link:hover {
+            text-decoration: underline;
+        }
+
         /* BUTTON */
         .btn {
             display: inline-block;
@@ -155,29 +204,20 @@
             color: white;
         }
 
-        /* The sidebar menu */
+        /* SIDEBAR */
         .sidebar {
             height: 100%;
-            /* 100% Full-height */
             width: 0;
-            /* 0 width - change this with JavaScript */
             position: fixed;
-            /* Stay in place */
             z-index: 1;
-            /* Stay on top */
             top: 0;
             left: 0;
             background-color: #111;
-            /* Black*/
             overflow-x: hidden;
-            /* Disable horizontal scroll */
             padding-top: 60px;
-            /* Place content 60px from the top */
             transition: 0.5s;
-            /* 0.5 second transition effect to slide in the sidebar */
         }
 
-        /* The sidebar links */
         .sidebar a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
@@ -187,12 +227,10 @@
             transition: 0.3s;
         }
 
-        /* When you mouse over the navigation links, change their color */
         .sidebar a:hover {
             color: #f1f1f1;
         }
 
-        /* Position and style the close button (top right corner) */
         .sidebar .closebtn {
             position: absolute;
             top: 0;
@@ -201,7 +239,6 @@
             margin-left: 50px;
         }
 
-        /* The button used to open the sidebar */
         .openbtn {
             font-size: 20px;
             cursor: pointer;
@@ -215,14 +252,12 @@
             background-color: #444;
         }
 
-        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
         #main {
             transition: margin-left .5s;
             /* If you want a transition effect */
             padding: 20px;
         }
 
-        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
         @media screen and (max-height: 450px) {
             .sidebar {
                 padding-top: 15px;
@@ -245,38 +280,95 @@
             <p>From lawn care to tech support—connect with people who can get it done.</p>
 
             <div class="search-box">
-                <input type="text" placeholder="What do you need help with?">
-                <button onclick="search()">Search</button>
+                <input id="searchInput" type="text" placeholder="What do you need help with?">
+                <button>Find Help</button>
+            </div>
+
+            <div class="hero-notice">
+                <p>
+                    🔐 To post a task, you’ll need to create a free account.
+                    <a href="Login.html">Sign up here</a>
+                </p>
             </div>
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <h2>How it works</h2>
+    <section class="section" style="padding:30px 20px;">
+        <h2>Welcome to TT TaskFinder</h2>
+        <div class="container grid grid-4 center">
+            <div class="card">
+                <h3>🔒 Verified Users</h3>
+                <p>ID-based trust system coming soon</p>
+            </div>
+
+            <div class="card">
+                <h3>📍 Trinidad & Tobago Only</h3>
+                <p>Local-first marketplace</p>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Fast Matching</h3>
+                <p>Get help in minutes, not days</p>
+            </div>
+
+            <div class="card">
+                <h3>💬 Direct Chat</h3>
+                <p>Talk before hiring coming soon</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background:#f8fafc;">
+        <div class="container center">
+            <h2>Trusted by locals across Trinidad & Tobago</h2>
 
             <div class="grid grid-3">
-                <div class="card center">
-                    <div class="icon">🔍</div>
-                    <h3>Browse</h3>
-                    <p>Find tasks near you by category or location.</p>
+                <div class="card">
+                    <h3>“Got my ceiling fan fixed same day by Bob”</h3>
+                    <p>- Tasker in San Fernando</p>
                 </div>
 
-                <div class="card center">
-                    <div class="icon">📄</div>
-                    <a href="post-job.html" style="text-decoration:none;color:inherit;">
-                        <h3>Apply</h3>
-                        <p>Send your details and availability.</p>
+                <div class="card">
+                    <h3>“Great for side income jobs”</h3>
+                    <p>- Tasker in Chaguanas</p>
                 </div>
 
-                <div class="card center">
-                    <div class="icon">✅</div>
-                    <h3>Get it done</h3>
-                    <p>Connect, complete, and get paid.</p>
+                <div class="card">
+                    <h3>“Bob Applied for my cleaner task within 2 hours”</h3>
+                    <p>- Tasker in Arima</p>
+                </div>
+            </div>
+
+            <div class="how-it-works-cta">
+                <p>New here? Learn how TT TaskFinder works</p>
+                <a href="./howitworks.html" class="how-link">
+                    View How It Works →
+                </a>
+            </div>
+        </div>
+
+        <div class="container center" style="margin-top:20px;">
+            <div class="grid grid-4">
+                <div class="card">
+                    <h3>1,200+</h3>
+                    <p>Tasks posted</p>
+                </div>
+                <div class="card">
+                    <h3>800+</h3>
+                    <p>Active workers</p>
+                </div>
+                <div class="card">
+                    <h3>4.8★</h3>
+                    <p>Average rating</p>
+                </div>
+                <div class="card">
+                    <h3>24/7</h3>
+                    <p>Availability</p>
                 </div>
             </div>
         </div>
     </section>
+
 
     <section class="section" style="background:#f1f5f9;">
         <div class="container">
@@ -322,7 +414,7 @@
         <h2>Ready to get started?</h2>
         <p>Join and start finding or posting jobs today.</p>
 
-        <a href="login.html" class="btn btn-white">Sign Up</a>
+        <a href="Login.html" class="btn btn-white">Sign Up</a>
         <a href="jobs.html" class="btn btn-outline">Browse Tasks</a>
     </section>
 
@@ -331,9 +423,23 @@
 
     <script type="module">
         import { loadNavbar } from "./js/navbar.js";
-        loadNavbar();
         import { loadFooter } from "./js/footer.js";
-        loadFooter();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNavbar();
+            loadFooter();
+
+            const btn = document.querySelector(".search-box button");
+            const input = document.getElementById("searchInput");
+
+            if (btn && input) {
+                btn.addEventListener("click", () => {
+                    const query = input.value.trim();
+                    if (!query) return;
+                    window.location.href = `./jobs.html?q=${encodeURIComponent(query)}`;
+                });
+            }
+        });
     </script>
 </body>
 
