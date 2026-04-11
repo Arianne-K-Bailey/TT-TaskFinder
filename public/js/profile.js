@@ -9,6 +9,7 @@ import {
   query,
   where,
   getDocs,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ======================
@@ -101,14 +102,18 @@ async function loadTaskerJobs(uid) {
 
   let html = "";
 
-  snap.forEach(doc => {
-    const job = doc.data();
+  snap.forEach(docSnap => {
+    const job = docSnap.data();
 
     html += `
       <div class="item">
         <strong>${job.title}</strong>
         <span class="badge blue">${job.status}</span>
         <p>${job.location} • TTD $${job.pay}</p>
+
+        <button onclick="deleteJob('${docSnap.id}')" class="btn delete-btn">
+          Delete
+        </button>
       </div>
     `;
   });
@@ -150,4 +155,27 @@ window.showTab = function (tab) {
 
   document.getElementById("clientView").style.display =
     isMain && !isWorker ? "block" : "none";
+};
+
+
+
+
+window.deleteJob = async function (jobId) {
+  const confirmDelete = confirm("Are you sure you want to delete this job?");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "jobs", jobId));
+    alert("Job deleted successfully");
+
+    // refresh list
+    const user = auth.currentUser;
+    if (user) {
+      loadTaskerJobs(user.uid);
+    }
+
+  } catch (error) {
+    console.error("Delete failed:", error);
+    alert("Failed to delete job");
+  }
 };

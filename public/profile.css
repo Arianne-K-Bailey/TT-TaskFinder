@@ -138,3 +138,13 @@ h1 {
   color: white;
   border: none;
 }
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  margin-top: 8px;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
