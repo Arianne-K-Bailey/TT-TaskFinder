@@ -6,7 +6,9 @@
   <link rel="stylesheet" href="PostJob.css">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="/public/components/navbar.css">
-  <title>Post Job</title>
+  <link rel="stylesheet" href="/public/components/footer.css">
+  <title>TT TaskFinder | Post a Job</title>
+    <link rel ="icon" href="/public/icon-192.png">
 </head>
 
 <body>
@@ -70,13 +72,17 @@
       <p id="formStatus" class="status"></p>
 
     </form>
+
   </main>
+  <div id="footer"></div>
 
   <script type="module">
     import { loadNavbar } from "/public/js/navbar.js";
+    import { loadFooter } from "/public/js/footer.js";
 
     window.addEventListener("DOMContentLoaded", () => {
       loadNavbar();
+      loadFooter();
     });
 
     import { auth, db } from "/public/firebase/firebaseConfig.js";

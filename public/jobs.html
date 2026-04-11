@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Jobs · TT TaskFinder</title>
+    <title>TT TaskFinder | Browse Jobs</title>
+    <link rel ="icon" href="/public/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="Jobs.css">
     <link rel="stylesheet" href="/public/components/navbar.css">
+    <link rel="stylesheet" href="/public/components/footer.css">
 </head>
 
 <body>
@@ -68,9 +70,15 @@
         <p style="color:#aaa;font-size:0.85rem;padding:1rem 0;">Loading jobs…</p>
     </div>
 
-    <footer style="text-align:center;padding:1.5rem;font-size:0.78rem;color:#aaa;border-top:1px solid #eee;">
-        © 2026 TaskFinder TT · Find help, fast.
-    </footer>
+     <div id="footer"></div>
+
+
+    <script type="module">
+        import { loadNavbar } from "/public/js/navbar.js";
+        loadNavbar();
+        import { loadFooter } from "/public/js/footer.js";
+        loadFooter();
+    </script>
 
     <script type="module" src="/public/js/browse.js"></script>
 

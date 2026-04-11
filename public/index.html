@@ -7,7 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="/public/components/navbar.css">
-    <title>TT TaskFinder</title>
+    <link rel="stylesheet" href="/public/components/footer.css">
+    <title>TT TaskFinder | Home Page</title>
+    <link rel ="icon" href="/public/icon-192.png">
     <style>
         /* MOBILE */
         .menu-toggle {
@@ -322,15 +324,14 @@
         <a href="browse.html" class="btn btn-outline">Browse Tasks</a>
     </section>
 
-
-    <footer style="text-align:center;padding:1.5rem;font-size:0.78rem;color:#aaa;border-top:1px solid #eee;">
-        © 2026 TaskFinder TT · Find help, fast.
-    </footer>
+   <div id="footer"></div>
 
 
     <script type="module">
         import { loadNavbar } from "/public/js/navbar.js";
         loadNavbar();
+        import { loadFooter } from "/public/js/footer.js";
+        loadFooter();
     </script>
 </body>
 

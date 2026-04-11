@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How It Works - TT TaskFinder</title>
+<title>TT TaskFinder | How It Works</title>
+<link rel ="icon" href="/public/icon-192.png">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="HowItWorks.css">
+<link rel="stylesheet" href="/public/components/navbar.css">
+<link rel="stylesheet" href="/public/components/footer.css">
 
 
 </head>
 
 <body>
+  <div id="navbar"></div>
 
 <div class="container">
 
@@ -135,6 +139,16 @@
   </div>
 
 </div>
+
+ <div id="footer"></div>
+
+
+    <script type="module">
+        import { loadNavbar } from "/public/js/navbar.js";
+        loadNavbar();
+        import { loadFooter } from "/public/js/footer.js";
+        loadFooter();
+    </script>
 
 </body>
 </html>
