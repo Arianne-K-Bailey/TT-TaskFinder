@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="/public/components/navbar.css">
-  <link rel="stylesheet" href="/public/components/footer.css">
+  <link rel="stylesheet" href="./components/navbar.css">
+  <link rel="stylesheet" href="./components/footer.css">
   <link rel="stylesheet" href="PostJob.css">
   <title>TT TaskFinder | Post a Job</title>
-  <link rel ="icon" href="/public/icon-192.png">
+  <link rel ="icon" href="./icon-192.png">
 </head>
 
 <body>
@@ -78,15 +78,15 @@
   <div id="footer"></div>
 
   <script type="module">
-    import { loadNavbar } from "/public/js/navbar.js";
-    import { loadFooter } from "/public/js/footer.js";
+    import { loadNavbar } from "./js/navbar.js";
+    import { loadFooter } from "./js/footer.js";
 
     window.addEventListener("DOMContentLoaded", () => {
       loadNavbar();
       loadFooter();
     });
 
-    import { auth, db } from "/public/firebase/firebaseConfig.js";
+    import { auth, db } from "./firebase/firebaseConfig.js";
     import {
       collection,
       addDoc,
@@ -190,7 +190,7 @@
           title: data.title,
           description: data.description,
           category: data.category,
-          pay: Number(data.pay), // ✅ FIXED FIELD NAME
+          pay: Number(data.pay), // FIELD NAME
           location: data.location,
           taskerName: currentUser.displayName || data.name,
           taskerId: currentUser.uid,

@@ -1,7 +1,7 @@
 export function loadFooter() {
   const target = document.getElementById("footer");
 
-  fetch("/public/components/footer.html")
+  fetch("./components/footer.html")
     .then(res => res.text())
     .then(html => {
       target.innerHTML = html;

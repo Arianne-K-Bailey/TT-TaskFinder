@@ -41,7 +41,7 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
 
     if (user) {
-        await loadUserData(); // 🔥 load saved + applied
+        await loadUserData(); // load saved + applied
     }
 
     renderJobs(allJobs);
