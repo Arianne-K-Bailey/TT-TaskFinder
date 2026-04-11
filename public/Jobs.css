@@ -1,0 +1,239 @@
+body {
+  margin: 0;
+  padding-top: 68px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+/* Page header */
+.page-header {
+  padding: 3rem 20px 1.5rem;
+}
+
+.page-header .eyebrow {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #dc2626;
+  margin-bottom: 0.5rem;
+}
+
+.page-header h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1;
+  color: #1e293b;
+}
+
+.page-header .sub {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Controls and filters */
+.controls {
+  padding: 0 20px 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.meta-row {
+  padding: 0 20px 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta-row span {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.meta-row select {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.4rem 0.9rem;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  outline: none;
+  background: white;
+}
+
+/* Jobs grid */
+.jobs-grid {
+  padding: 0 20px 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.2rem;
+}
+
+/* Job card */
+.job-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.job-card:hover {
+  border-color: #dc2626;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.category-badge {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.pay-amount {
+  font-size: 1.4rem;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.job-title {
+  font-size: 1.4rem;
+  color: #1e293b;
+  line-height: 1.05;
+}
+
+.job-desc {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.card-meta span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.8rem;
+}
+
+.poster {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.view-btn {
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 1.5px solid #dc2626;
+  color: #dc2626;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.73rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+}
+
+.view-btn:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* Empty state */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+
+  .page-header,
+  .controls,
+  .meta-row,
+  .jobs-grid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}

@@ -1,0 +1,190 @@
+body {
+  margin: 0;
+  padding-top: 68px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #dc2626, #7f1d1d);
+  color: white;
+  padding: 70px 20px;
+  text-align: center;
+}
+
+.hero p {
+  color: #fee2e2;
+  max-width: 600px;
+  margin: 10px auto 0;
+}
+
+.navbar {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #475569;
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    color: #dc2626;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.nav-actions .login {
+    text-decoration: none;
+    color: #475569;
+}
+
+.nav-actions .signup {
+    background: #dc2626;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.nav-actions .signup:hover {
+    background: #b91c1c;
+}
+
+.section {
+  padding: 60px 20px;
+}
+
+.section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #e2e8f0;
+}
+
+.mission p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.team-grid {
+  display: grid;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.member {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: 0.2s;
+}
+
+.member:hover {
+  transform: translateY(-4px);
+  border-color: #dc2626;
+}
+
+.member img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.role {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.desc {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.links {
+  margin-top: 10px;
+}
+
+.links a {
+  margin: 0 5px;
+  text-decoration: none;
+  color: #64748b;
+}
+
+.info-box {
+  background: #fee2e2;
+  border-radius: 10px;
+  padding: 18px 20px;
+  max-width: 520px;   
+  margin: 0 auto;
+  font-size: 0.95rem;
+}
+
+.info-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.info-row {
+  margin-bottom: 6px;
+}
+
+.values {
+  display: grid;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.value {
+  text-align: center;
+}
+
+.icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}

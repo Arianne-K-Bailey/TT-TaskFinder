@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TT TaskFinder | My Profile</title>
+    <link rel ="icon" href="./icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="./components/navbar.css">
+  <link rel="stylesheet" href="./components/footer.css">
+</head>
+
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1>My Profile</h1>
+        <p style="margin:0;color:#64748b;">Manage your account and activity</p>
+      </div>
+
+      <div class="toggle">
+        <button id="workerBtn" class="active" onclick="setMode('worker')">Taskee</button>
+        <button id="clientBtn" onclick="setMode('client')">Tasker</button>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- PROFILE CARD -->
+      <div class="card center">
+        <div class="avatar">👤</div>
+
+        <h3 id="username">Loading...</h3>
+        <p id="email">Loading...</p>
+
+        <p>⭐ 4.8 • 47 jobs completed</p>
+
+        <hr>
+
+        <p id="phone">Loading...</p>
+
+        <hr>
+
+        <h4>Skills</h4>
+        <p>Lawn Care • Repairs • Cleaning • Tech Support</p>
+
+        <button class="btn" style="width:100%;" onclick="openEditProfile()">
+          Edit Profile
+        </button>
+      </div>
+
+      <!-- JOBS CARD -->
+      <div class="card">
+
+        <!-- TOGGLES INSIDE CARD -->
+        <div class="tabs">
+          <button id="tab1" class="active" onclick="showTab('main')">Active Jobs</button>
+          <button id="tab2" onclick="showTab('saved')">Saved</button>
+        </div>
+
+        <!-- TASKEE VIEW -->
+        <div id="workerView">
+
+          <h4>Taskee (Applied Jobs)</h4>
+          <div id="taskeeJobs"></div>
+
+        </div>
+
+        <!-- TASKER VIEW -->
+        <div id="clientView" style="display:none;">
+
+          <h4>Tasker (Jobs You Posted)</h4>
+          <div id="taskerJobs"></div>
+
+          <button onclick="window.location.href='post-job.html'" class="btn">+ Post New Job</button>
+
+        </div>
+
+        <!-- SAVED TAB -->
+        <div id="saved" style="display:none;">
+          <p>No saved tasks yet.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+
+      <h3>Edit Profile</h3>
+
+      <input id="editUsername" placeholder="Username" />
+      <input id="editPhone" placeholder="Phone" />
+
+      <div class="modal-actions">
+        <button class="save-btn" onclick="saveProfile()">Save</button>
+        <button class="cancel-btn" onclick="closeEditProfile()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id ="footer"></div>
+
+<script type="module" src="./js/profile.js"></script>
+<script type="module">
+    import { loadNavbar } from "./js/navbar.js";
+    import { loadFooter } from "./js/footer.js";
+
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadNavbar();
+      loadFooter();
+    });
+  </script>
+</body>
+
+</html>

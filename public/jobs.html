@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TT TaskFinder | Browse Jobs</title>
+    <link rel ="icon" href="./icon-192.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="Jobs.css">
+    <link rel="stylesheet" href="./components/navbar.css">
+    <link rel="stylesheet" href="./components/footer.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="page-header">
+        <p class="eyebrow">Trinidad & Tobago</p>
+        <h1>Browse <span>Available</span> Tasks</h1>
+        <p class="sub">Browse all open jobs and sign up when you're ready to apply.</p>
+    </div>
+
+    <div class="controls">
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search by title, location or category…">
+            <button onclick="filterJobs()">Search</button>
+        </div>
+
+        <div class="categories">
+            <span class="active" onclick="setCategory('All', this)">All</span>
+            <span onclick="setCategory('Cleaning', this)">🧹 Cleaning</span>
+            <span onclick="setCategory('Delivery', this)">📦 Delivery</span>
+            <span onclick="setCategory('Gardening', this)">🌿 Gardening</span>
+            <span onclick="setCategory('Tech', this)">💻 Tech</span>
+            <span onclick="setCategory('Handyman', this)">🔧 Handyman</span>
+            <span onclick="setCategory('Tutoring', this)">📚 Tutoring</span>
+            <span onclick="setCategory('Other', this)">✦ Other</span>
+        </div>
+    </div>
+
+    <!-- JOB DETAIL MODAL -->
+    <div id="jobModal" class="modal hidden">
+        <div class="modal-content">
+
+            <span class="close-btn" onclick="closeJobModal()"></span>
+
+            <div id="modalBody">
+                <p>Loading...</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="meta-row">
+        <span><strong id="jobCount">0</strong> jobs found</span>
+
+        <select id="sortSelect" onchange="filterJobs()">
+            <option value="newest">Newest First</option>
+            <option value="pay_high">Highest Pay</option>
+            <option value="pay_low">Lowest Pay</option>
+        </select>
+    </div>
+
+    <div class="jobs-grid" id="jobsGrid">
+        <p style="color:#aaa;font-size:0.85rem;padding:1rem 0;">Loading jobs…</p>
+    </div>
+
+     <div id="footer"></div>
+
+
+    <script type="module">
+        import { loadNavbar } from "./js/navbar.js";
+        loadNavbar();
+        import { loadFooter } from "./js/footer.js";
+        loadFooter();
+    </script>
+
+    <script type="module" src="./js/browse.js"></script>
+
+</body>
+
+</html>

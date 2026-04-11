@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TT TaskFinder Login | Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="Login.css">
+  <title>TT TaskFinder | Login/Sign Up</title>
+    <link rel ="icon" href="/public/icon-192.png">
+  
+</head>
+
+<body>
+
+  <div class="container" id="container">
+    <div class="form-container sign-up">
+      <form action="#">
+        <h1>🛠️Create Account</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class='bx bxl-facebook'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-google'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-github'></i></a>
+        </div>
+        <span>or use your email for registration</span>
+        <input id="signupUsername" type="text" placeholder="Username" />
+        <input id="signupEmail" type="email" placeholder="Email" />
+        <input id="signupPassword" type="password" placeholder="Password" />
+        <input id="signupPhone" type="text" placeholder="Phone Number" />
+        <input id="signupDOB" type="text" placeholder="Date of Birth (dd/mm/yyyy)" />
+        <button type="button" id="signupBtn">Sign Up</button>
+      </form>
+    </div>
+
+    <div class="form-container login">
+      <form action="#">
+        <h1>🛠️Login</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class='bx bxl-facebook'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-google'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-linkedin'></i></a>
+          <a href="#" class="icon"><i class='bx bxl-github'></i></a>
+        </div>
+        <span>or use your email/username and password</span>
+        <input id="identifier" type="text" placeholder="Email or Username" />
+        <input id="loginPassword" type="password" placeholder="Password" />
+        <button type="button" id="loginBtn">Login</button>
+      </form>
+    </div>
+
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class ="toggle-panel toggle-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button class="hidden" id="login">Login</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start journey with us</p>
+          <button class="hidden" id="signUp">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { signUpUser, loginUser } from "./firebase/auth.js"; //./auth.js
+
+    // =========================
+    // TOGGLE (UI ONLY)
+    // =========================
+    const container = document.getElementById('container');
+    const signUpSwitch = document.getElementById('signUp');
+    const loginSwitch = document.getElementById('login');
+
+    signUpSwitch.addEventListener('click', () => {
+      container.classList.add("active");
+    });
+
+    loginSwitch.addEventListener('click', () => {
+      container.classList.remove("active");
+    });
+
+    // =========================
+    // AUTO SWITCH BASED ON URL
+    // =========================
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+
+    if (mode === "signup") {
+      container.classList.add("active");
+    } else {
+      container.classList.remove("active");
+    }
+
+    // =========================
+    // SIGN UP
+    // =========================
+    const signupBtn = document.getElementById("signupBtn");
+
+    signupBtn.addEventListener("click", async () => {
+      const username = document.getElementById("signupUsername").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      const phone = document.getElementById("signupPhone").value.trim();
+      const dob = document.getElementById("signupDOB").value.trim();
+
+      if (!username || !email || !password) {
+        alert("Please fill in required fields");
+        return;
+      }
+
+      try {
+        await signUpUser(email, password, username, phone, dob);
+        alert("Account created successfully!");
+
+        // Redirect after signup
+        window.location.href = "index.html";
+
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    });
+
+    // =========================
+    // LOGIN (USERNAME OR EMAIL)
+    // =========================
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.addEventListener("click", async () => {
+    const identifier = document.getElementById("identifier").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!identifier || !password) {
+      alert("Enter email/username and password");
+      return;
+    }
+
+    try {
+      await loginUser(identifier, password);
+      alert("Logged in successfully!");
+
+      // Redirect after login
+      window.location.href = "index.html";
+
+    }catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+    });
+
+    window.history.replaceState({}, document.title, "Login.html");
+  </script>
+</body>
+</html>

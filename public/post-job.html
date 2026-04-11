@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="./components/navbar.css">
+  <link rel="stylesheet" href="./components/footer.css">
+  <link rel="stylesheet" href="PostJob.css">
+  <title>TT TaskFinder | Post a Job</title>
+  <link rel ="icon" href="./icon-192.png">
+</head>
+
+<body>
+  <div id="navbar"></div>
+
+  <main class="container">
+    <header class="header">
+      <p class="eyebrow">Got a task?</p>
+      <h1>Post a Job</h1>
+      <p class="sub">Fill in the details and publish instantly.</p>
+    </header>
+
+    <form id="jobForm" novalidate>
+
+      <div class="field">
+        <label for="title">Job Title</label>
+        <input id="title" type="text" maxlength="80" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description"></textarea>
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">Select a category</option>
+          <option>Cleaning</option>
+          <option>Delivery</option>
+          <option>Gardening</option>
+          <option>Tech</option>
+          <option>Handyman</option>
+          <option>Tutoring</option>
+          <option>Other</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="pay">Pay (TTD)</label>
+        <input id="pay" type="number" min="1" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" type="text" maxlength="80" />
+        <small class="error"></small>
+      </div>
+
+      <div class="field">
+        <label for="name">Your Name</label>
+        <input id="name" type="text" maxlength="50" />
+        <small class="error"></small>
+      </div>
+
+      <button type="submit" id="submitBtn">Post Job</button>
+      <p id="formStatus" class="status"></p>
+
+    </form>
+
+  </main>
+  
+  <div id="footer"></div>
+
+  <script type="module">
+    import { loadNavbar } from "./js/navbar.js";
+    import { loadFooter } from "./js/footer.js";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadNavbar();
+      loadFooter();
+    });
+
+    import { auth, db } from "./firebase/firebaseConfig.js";
+    import {
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    
+  
+    const form = document.getElementById("jobForm");
+    const statusText = document.getElementById("formStatus");
+    const btn = document.getElementById("submitBtn");
+
+    let currentUser = null;
+
+    // AUTH GUARD
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "Login.html?redirect=post-job.html";
+        return;
+      }
+
+      currentUser = user;
+    });
+
+    // HELPERS
+    function getValue(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function setError(id, message) {
+      document.querySelector(`#${id} + .error`).textContent = message;
+    }
+
+    function clearErrors() {
+      document.querySelectorAll(".error").forEach(e => e.textContent = "");
+    }
+
+    function validate(data) {
+      let valid = true;
+
+      if (!data.title) {
+        setError("title", "Required");
+        valid = false;
+      }
+
+      if (!data.description) {
+        setError("description", "Required");
+        valid = false;
+      }
+
+      if (!data.category) {
+        setError("category", "Select one");
+        valid = false;
+      }
+
+      if (!data.pay || isNaN(data.pay) || Number(data.pay) <= 0) {
+        setError("pay", "Invalid amount");
+        valid = false;
+      }
+
+      if (!data.location) {
+        setError("location", "Required");
+        valid = false;
+      }
+
+      if (!data.name) {
+        setError("name", "Required");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    // SUBMIT JOB
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      clearErrors();
+      statusText.textContent = "";
+
+      const data = {
+        title: getValue("title"),
+        description: getValue("description"),
+        category: getValue("category"),
+        pay: getValue("pay"),
+        location: getValue("location"),
+        name: getValue("name"),
+      };
+
+      if (!validate(data)) return;
+
+      btn.disabled = true;
+      btn.textContent = "Posting...";
+
+      try {
+        const docRef = await addDoc(collection(db, "jobs"), {
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          pay: Number(data.pay), // FIELD NAME
+          location: data.location,
+          taskerName: currentUser.displayName || data.name,
+          taskerId: currentUser.uid,
+          taskeeId: null,
+          status: "open",
+          createdAt: serverTimestamp()
+        });
+
+        statusText.textContent = "✅ Job posted successfully!";
+
+        // redirect to browse page
+        setTimeout(() => {
+          window.location.href = "jobs.html";
+        }, 800);
+
+      } catch (error) {
+        console.error(error);
+        statusText.textContent = "❌ Failed to post job.";
+        btn.disabled = false;
+        btn.textContent = "Post Job";
+      }
+    });
+
+
+  </script>
+
+</body>
+</html>
