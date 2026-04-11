@@ -1,16 +1,23 @@
 import { auth, db } from "../firebase/firebaseConfig.js";
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import {
   doc,
   getDoc,
+  updateDoc,
   collection,
   query,
   where,
   getDocs,
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+let currentUserId = null;
+let currentUserData = null;
+
+let currentMode = "worker";
+let currentTab = "main";
 
 // ======================
 // LOAD PROFILE
@@ -21,29 +28,91 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  currentUserId = user.uid;
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) return;
+
+  currentUserData = userSnap.data();
+
+  document.getElementById("username").textContent =
+    currentUserData.username || "No Username";
+
+  document.getElementById("email").textContent =
+    currentUserData.email || "No Email";
+
+  const phone = currentUserData.phone;
+
+  document.getElementById("phone").textContent =
+    phone && phone.trim() !== ""
+      ? `📞 ${phone}`
+      : "📞 Not provided";
+
+  await loadTaskeeJobs(user.uid);
+  await loadTaskerJobs(user.uid);
+
+  currentMode = "worker";
+  currentTab = "main";
+  renderTab();
+});
+
+window.openEditProfile = function () {
+  document.getElementById("editModal").style.display = "flex";
+
+  document.getElementById("editUsername").value =
+    currentUserData.username || "";
+
+  document.getElementById("editPhone").value =
+    currentUserData.phone || "";
+};
+
+window.closeEditProfile = function () {
+  document.getElementById("editModal").style.display = "none";
+};
+
+
+// ======================
+// UPDATE PROFILE
+// ======================
+window.saveProfile = async function () {
   try {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
+    const userRef = doc(db, "users", currentUserId);
 
-    if (!userSnap.exists()) {
-      console.error("User document missing");
-      return;
-    }
+    const updatedData = {
+      username: document.getElementById("editUsername").value,
+      phone: document.getElementById("editPhone").value
+    };
 
-    const data = userSnap.data();
+    await updateDoc(userRef, updatedData);
 
-    document.getElementById("username").textContent = data.username || "No Username";
-    document.getElementById("email").textContent = data.email || "No Email";
+    // 🔥 RE-FETCH UPDATED DATA (IMPORTANT)
+    const updatedSnap = await getDoc(userRef);
+    currentUserData = updatedSnap.data();
+
+    // update UI
+    document.getElementById("username").textContent =
+      currentUserData.username;
+
     document.getElementById("phone").textContent =
-      data.phone ? `📞 ${data.phone}` : "📞 Not provided";
+      currentUserData.phone
+        ? `📞 ${currentUserData.phone}`
+        : "📞 Not provided";
 
-    await loadTaskeeJobs(user.uid);
-    await loadTaskerJobs(user.uid);
+    closeEditProfile();
+
+    alert("Profile updated!");
+
+    await updateProfile(auth.currentUser, {
+      displayName: updatedData.username
+    });
 
   } catch (err) {
-    console.error("Profile load failed:", err);
+    console.error(err);
+    alert("Failed to update profile");
   }
-});
+};
 
 
 // ======================
@@ -126,40 +195,60 @@ async function loadTaskerJobs(uid) {
 // TOGGLE UI
 // ======================
 window.setMode = function (mode) {
-  const isMainTab = document.getElementById("saved").style.display !== "block";
+  currentMode = mode;
 
-  document.getElementById("workerBtn").classList.toggle("active", mode === "worker");
-  document.getElementById("clientBtn").classList.toggle("active", mode === "client");
+  const isWorker = mode === "worker";
 
-  document.getElementById("workerView").style.display =
-    isMainTab && mode === "worker" ? "block" : "none";
+  document.getElementById("workerBtn").classList.toggle("active", isWorker);
+  document.getElementById("clientBtn").classList.toggle("active", !isWorker);
 
-  document.getElementById("clientView").style.display =
-    isMainTab && mode === "client" ? "block" : "none";
+  renderTab(); // unified renderer
 };
 
 
-// tabs
+// ======================
+// SHOWING TABS
+// ======================
 window.showTab = function (tab) {
-  const isMain = tab === "main";
+  currentTab = tab;
 
-  // Show/hide saved tab
-  document.getElementById("saved").style.display = isMain ? "none" : "block";
+  document.getElementById("tab1").classList.toggle("active", tab === "main");
+  document.getElementById("tab2").classList.toggle("active", tab === "saved");
 
-  // Check which mode is active
-  const isWorker = document.getElementById("workerBtn").classList.contains("active");
-
-  // Only show views when on "Active Jobs"
-  document.getElementById("workerView").style.display =
-    isMain && isWorker ? "block" : "none";
-
-  document.getElementById("clientView").style.display =
-    isMain && !isWorker ? "block" : "none";
+  renderTab();
 };
 
 
+// ======================
+// RENDER FUNCTION
+// ======================
+function renderTab() {
+
+  const isWorker = currentMode === "worker";
+  const isMain = currentTab === "main";
+
+  // ---------------- VIEW CONTROL ----------------
+
+  if (!isMain) {
+    document.getElementById("workerView").style.display = "none";
+    document.getElementById("clientView").style.display = "none";
+    document.getElementById("saved").style.display = "block";
+    return;
+  }
+
+  document.getElementById("saved").style.display = "none";
+
+  document.getElementById("workerView").style.display =
+    isWorker ? "block" : "none";
+
+  document.getElementById("clientView").style.display =
+    !isWorker ? "block" : "none";
+}
 
 
+// ======================
+// DELETE BUTTON
+// ======================
 window.deleteJob = async function (jobId) {
   const confirmDelete = confirm("Are you sure you want to delete this job?");
   if (!confirmDelete) return;
@@ -179,3 +268,4 @@ window.deleteJob = async function (jobId) {
     alert("Failed to delete job");
   }
 };
+

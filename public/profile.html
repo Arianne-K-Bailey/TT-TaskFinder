@@ -47,7 +47,9 @@
         <h4>Skills</h4>
         <p>Lawn Care • Repairs • Cleaning • Tech Support</p>
 
-        <button class="btn" style="width:100%;">Edit Profile</button>
+        <button class="btn" style="width:100%;" onclick="openEditProfile()">
+          Edit Profile
+        </button>
       </div>
 
       <!-- JOBS CARD -->
@@ -82,6 +84,22 @@
           <p>No saved tasks yet.</p>
         </div>
 
+      </div>
+
+    </div>
+  </div>
+
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+
+      <h3>Edit Profile</h3>
+
+      <input id="editUsername" placeholder="Username" />
+      <input id="editPhone" placeholder="Phone" />
+
+      <div class="modal-actions">
+        <button class="save-btn" onclick="saveProfile()">Save</button>
+        <button class="cancel-btn" onclick="closeEditProfile()">Cancel</button>
       </div>
 
     </div>
