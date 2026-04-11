@@ -119,6 +119,7 @@ h1 {
   background: none;
   cursor: pointer;
   position: relative;
+  color:#0f172a;
 }
 
 .tabs button.active {
