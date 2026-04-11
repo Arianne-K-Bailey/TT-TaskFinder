@@ -7,7 +7,7 @@
   <title>Profile - TT TaskFinder</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="profile.css">
-  <link rel="stylesheet" href="/public/components/navbar.css">
+  <link rel="stylesheet" href="/components/navbar.css">
 </head>
 
 <body>
@@ -73,6 +73,8 @@
           <h4>Tasker (Jobs You Posted)</h4>
           <div id="taskerJobs"></div>
 
+          <button onclick="window.location.href='post-job.html'" class="btn">+ Post New Job</button>
+
         </div>
 
         <!-- SAVED TAB -->
@@ -86,7 +88,7 @@
   </div>
 
   <script type="module">
-    import { loadNavbar } from "/public/js/navbar.js";
+    import { loadNavbar } from "./js/navbar.js";
 
     window.addEventListener("DOMContentLoaded", () => {
       loadNavbar();

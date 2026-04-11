@@ -8,16 +8,15 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 
 // ======================
 // LOAD PROFILE
 // ======================
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "Login.html";
+    window.location.href = "index.html";
     return;
   }
 
@@ -89,23 +88,23 @@ async function loadTaskeeJobs(uid) {
 async function loadTaskerJobs(uid) {
   const q = query(
     collection(db, "jobs"),
-    where("postedBy", "==", uid)
+    where("taskerId", "==", uid)
   );
 
   const snap = await getDocs(q);
-
   const container = document.getElementById("taskerJobs");
-  container.innerHTML = "";
 
   if (snap.empty) {
     container.innerHTML = "<p>No posted jobs yet.</p>";
     return;
   }
 
+  let html = "";
+
   snap.forEach(doc => {
     const job = doc.data();
 
-    container.innerHTML += `
+    html += `
       <div class="item">
         <strong>${job.title}</strong>
         <span class="badge blue">${job.status}</span>
@@ -113,26 +112,42 @@ async function loadTaskerJobs(uid) {
       </div>
     `;
   });
+
+  container.innerHTML = html;
 }
 
 
 // ======================
 // TOGGLE UI
 // ======================
-window.setMode = function(mode) {
-  document.getElementById("workerView").style.display =
-    mode === "worker" ? "block" : "none";
-
-  document.getElementById("clientView").style.display =
-    mode === "client" ? "block" : "none";
+window.setMode = function (mode) {
+  const isMainTab = document.getElementById("saved").style.display !== "block";
 
   document.getElementById("workerBtn").classList.toggle("active", mode === "worker");
   document.getElementById("clientBtn").classList.toggle("active", mode === "client");
+
+  document.getElementById("workerView").style.display =
+    isMainTab && mode === "worker" ? "block" : "none";
+
+  document.getElementById("clientView").style.display =
+    isMainTab && mode === "client" ? "block" : "none";
 };
 
 
 // tabs
-window.showTab = function(tab) {
-  document.getElementById("main").style.display = tab === "main" ? "block" : "none";
-  document.getElementById("saved").style.display = tab === "saved" ? "block" : "none";
+window.showTab = function (tab) {
+  const isMain = tab === "main";
+
+  // Show/hide saved tab
+  document.getElementById("saved").style.display = isMain ? "none" : "block";
+
+  // Check which mode is active
+  const isWorker = document.getElementById("workerBtn").classList.contains("active");
+
+  // Only show views when on "Active Jobs"
+  document.getElementById("workerView").style.display =
+    isMain && isWorker ? "block" : "none";
+
+  document.getElementById("clientView").style.display =
+    isMain && !isWorker ? "block" : "none";
 };

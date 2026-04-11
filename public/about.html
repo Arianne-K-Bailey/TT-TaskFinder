@@ -6,131 +6,133 @@
 <title>About - TT TaskFinder</title>
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="About.css">
-<link rel="stylesheet" href="/public/components/navbar.css">
+<link rel="stylesheet" href="/components/navbar.css">
 
 
 </head>
 
 <body>
-<div id="navbar"></div>
+  <div id="navbar"></div>
 
-<section class="hero">
-  <h1>About TT TaskFinder</h1>
-  <p>Built by students, for the community. Connecting Trinidad & Tobago through local services.</p>
-</section>
+  <section class="hero">
+    <h1>About TT TaskFinder</h1>
+    <p>Built by students, for the community. Connecting Trinidad & Tobago through local services.</p>
+  </section>
 
-<section class="section">
-  <div class="container">
-    <div class="card mission">
-      <h2>Our Mission</h2>
-      <p>
-        TT TaskFinder was created to connect people who need services with skilled workers 
-        across Trinidad & Tobago. From lawn care to technical support, we make it easier to find help.
-      </p>
-      <p>
-        Many residents struggle to find reliable services, while skilled individuals struggle 
-        to find consistent work. Our platform bridges that gap.
-      </p>
-      <p>
-        We aim to create opportunities, build trust, and strengthen our local community.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:white;">
-  <div class="container">
-    <h2>Meet the Team</h2>
-
-    <div class="team-grid" id="team"></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="info-box">
-      <h2>Project Information</h2>
-
-      <div class="info-row"><strong>Course:</strong> INFO 1601</div>
-      <div class="info-row"><strong>Institution:</strong> UWI St. Augustine</div>
-      <div class="info-row"><strong>Semester:</strong> 2</div>
-      <div class="info-row"><strong>Tech:</strong> HTML, CSS, JavaScript</div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:white;">
-  <div class="container">
-    <h2>Our Values</h2>
-
-    <div class="values">
-      <div class="value">
-        <div class="icon">🤝</div>
-        <h3>Community</h3>
-        <p>We build for local people and real needs.</p>
-      </div>
-
-      <div class="value">
-        <div class="icon">🛡️</div>
-        <h3>Trust</h3>
-        <p>Creating a safe space for services and work.</p>
-      </div>
-
-      <div class="value">
-        <div class="icon">⚡</div>
-        <h3>Simplicity</h3>
-        <p>No complicated systems—just get things done.</p>
+  <section class="section">
+    <div class="container">
+      <div class="card mission">
+        <h2>Our Mission</h2>
+        <p>
+          TT TaskFinder was created to connect people who need services with skilled workers 
+          across Trinidad & Tobago. From lawn care to technical support, we make it easier to find help.
+        </p>
+        <p>
+          Many residents struggle to find reliable services, while skilled individuals struggle 
+          to find consistent work. Our platform bridges that gap.
+        </p>
+        <p>
+          We aim to create opportunities, build trust, and strengthen our local community.
+        </p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<script>
+  <section class="section" style="background:white;">
+    <div class="container">
+      <h2>Meet the Team</h2>
 
-const teamMembers = [
-  {
-    name: "Brianna Ramdass",
-    role: "Lead",
-    desc: "Handles submission, project coordination, and overall management.",
-    img: "lead.jpeg"
-  },
-  {
-    name: "Avidesh Singh",
-    role: "UI Design",
-    desc: "Creates UI mockups and defines the visual design of the platform.",
-    img: "uidesign.jpeg"
-  },
-  {
-    name: "Zion Roberts",
-    role: "Marketing",
-    desc: "Develops the solution idea, branding, and presentation video.",
-    img: "marketing.jpeg"
-  },
-  {
-    name: "Arianne Bailey",
-    role: "DevOps",
-    desc: "Sets up the repository, deployment, and manages integrations.",
-    img: "devop.jpeg"
-  }
-];
-
-const container = document.getElementById("team");
-
-teamMembers.forEach(m => {
-  container.innerHTML += `
-    <div class="member">
-      <img src="${m.img}">
-      <h3>${m.name}</h3>
-      <div class="role">${m.role}</div>
-      <div class="desc">${m.desc}</div>
+      <div class="team-grid" id="team"></div>
     </div>
-  `;
-});
-</script>
- <script type="module">
-        import { loadNavbar } from "/public/js/navbar.js";
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="info-box">
+        <h2>Project Information</h2>
+
+        <div class="info-row"><strong>Course:</strong> INFO 1601</div>
+        <div class="info-row"><strong>Institution:</strong> UWI St. Augustine</div>
+        <div class="info-row"><strong>Semester:</strong> 2</div>
+        <div class="info-row"><strong>Tech:</strong> HTML, CSS, JavaScript</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:white;">
+    <div class="container">
+      <h2>Our Values</h2>
+
+      <div class="values">
+        <div class="value">
+          <div class="icon">🤝</div>
+          <h3>Community</h3>
+          <p>We build for local people and real needs.</p>
+        </div>
+
+        <div class="value">
+          <div class="icon">🛡️</div>
+          <h3>Trust</h3>
+          <p>Creating a safe space for services and work.</p>
+        </div>
+
+        <div class="value">
+          <div class="icon">⚡</div>
+          <h3>Simplicity</h3>
+          <p>No complicated systems—just get things done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+        import { loadNavbar } from "./js/navbar.js";
         loadNavbar();
+  </script>
+
+  <script>
+
+    const teamMembers = [
+      {
+        name: "Brianna Ramdass",
+        role: "Lead",
+        desc: "Handles submission, project coordination, and overall management.",
+        img: "lead.jpeg"
+      },
+      {
+        name: "Avidesh Singh",
+        role: "UI Design",
+        desc: "Creates UI mockups and defines the visual design of the platform.",
+        img: "uidesign.jpeg"
+      },
+      {
+        name: "Zion Roberts",
+        role: "Marketing",
+        desc: "Develops the solution idea, branding, and presentation video.",
+        img: "marketing.jpeg"
+      },
+      {
+        name: "Arianne Bailey",
+        role: "DevOps",
+        desc: "Sets up the repository, deployment, and manages integrations.",
+        img: "devop.jpeg"
+      }
+    ];
+
+    const container = document.getElementById("team");
+
+    teamMembers.forEach(m => {
+      container.innerHTML += `
+        <div class="member">
+          <img src="${m.img}">
+          <h3>${m.name}</h3>
+          <div class="role">${m.role}</div>
+          <div class="desc">${m.desc}</div>
+        </div>
+      `;
+    });
     </script>
+    
 
 </body>
 </html>

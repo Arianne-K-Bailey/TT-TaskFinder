@@ -7,9 +7,10 @@
     <title>Browse Jobs · TT TaskFinder</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="Jobs.css">
-    <link rel="stylesheet" href="/public/components/navbar.css">
+    <link rel="stylesheet" href="/components/navbar.css">
 </head>
 
 <body>
@@ -109,8 +110,8 @@
 
                 const timeLabel =
                     daysAgo === 0 ? "Today" :
-                    daysAgo === 1 ? "Yesterday" :
-                    `${daysAgo}d ago`;
+                        daysAgo === 1 ? "Yesterday" :
+                            `${daysAgo}d ago`;
 
                 html += `
                     <div class="job-card">
@@ -235,4 +236,5 @@
     </script>
 
 </body>
+
 </html>
