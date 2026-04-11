@@ -9,7 +9,7 @@ import { doc, onSnapshot }
 export function loadNavbar() {
   const navTarget = document.getElementById("navbar");
 
-  fetch("./components/navbar.html")
+  fetch("/public/components/navbar.html")
     .then(res => res.text())
     .then(html => {
       navTarget.innerHTML = html;

@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="PostJob.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="/public/components/navbar.css">
   <title>Post Job</title>
 </head>
 
 <body>
+  <div id="navbar"></div>
 
   <main class="container">
     <header class="header">
@@ -70,7 +73,13 @@
   </main>
 
   <script type="module">
-    import { auth, db } from "./firebase/firebaseConfig.js";
+    import { loadNavbar } from "/public/js/navbar.js";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadNavbar();
+    });
+
+    import { auth, db } from "/public/firebase/firebaseConfig.js";
     import {
       collection,
       addDoc,
@@ -81,6 +90,8 @@
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+    
+  
     const form = document.getElementById("jobForm");
     const statusText = document.getElementById("formStatus");
     const btn = document.getElementById("submitBtn");
