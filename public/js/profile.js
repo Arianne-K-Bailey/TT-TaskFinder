@@ -123,7 +123,6 @@ window.saveProfile = async function () {
 // TASKEE JOBS
 // ======================
 async function loadTaskeeJobs(uid) {
-  // Get applied jobs references from Firestore
   const q = query(collection(db, "applications"), where("userId", "==", uid));
   const snap = await getDocs(q);
 
@@ -137,7 +136,6 @@ async function loadTaskeeJobs(uid) {
 
   let html = "";
 
-  // Loop through applications
   for (const docSnap of snap.docs) {
     const app = docSnap.data();
     const job = await fetchJob(app.jobId);
@@ -148,6 +146,9 @@ async function loadTaskeeJobs(uid) {
         <strong>${job.title}</strong>
         <span class="badge yellow">${app.status || job.status || "applied"}</span>
         <p>${job.location} • TTD $${job.pay}</p>
+        <button onclick="deleteApplication('${docSnap.id}')" class="btn delete-btn">
+          Remove Application
+        </button>
       </div>
     `;
   }
@@ -155,11 +156,29 @@ async function loadTaskeeJobs(uid) {
   container.innerHTML = html;
 }
 
+//Delete Taskee Application
+window.deleteApplication = async function (applicationId) {
+  const confirmDelete = confirm("Are you sure you want to remove this application?");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "applications", applicationId));
+    alert("Application removed successfully");
+
+    // Refresh the list
+    if (auth.currentUser) {
+      await loadTaskeeJobs(auth.currentUser.uid);
+    }
+  } catch (err) {
+    console.error("Failed to remove application:", err);
+    alert("Failed to remove application");
+  }
+};
+
 // ===================
 // LOAD SAVED JOBS
 // ===================
 async function loadSavedJobs(uid) {
-  // Get saved jobs references from Firestore
   const q = query(collection(db, "savedJobs"), where("userId", "==", uid));
   const snap = await getDocs(q);
 
@@ -182,12 +201,34 @@ async function loadSavedJobs(uid) {
       <div class="item">
         <strong>${job.title}</strong>
         <p>${job.location} • TTD $${job.pay}</p>
+        <button onclick="deleteSavedJob('${docSnap.id}')" class="btn delete-btn">
+          Remove Saved Job
+        </button>
       </div>
     `;
   }
 
   container.innerHTML = html;
 }
+
+//Delete Saved Jobs
+window.deleteSavedJob = async function (savedJobId) {
+  const confirmDelete = confirm("Are you sure you want to remove this saved job?");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "savedJobs", savedJobId));
+    alert("Saved job removed successfully");
+
+    // Refresh saved jobs list
+    if (auth.currentUser) {
+      await loadSavedJobs(auth.currentUser.uid);
+    }
+  } catch (err) {
+    console.error("Failed to remove saved job:", err);
+    alert("Failed to remove saved job");
+  }
+};
 
 // ======================
 // TASKER JOBS
