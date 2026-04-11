@@ -41,6 +41,19 @@
         </div>
     </div>
 
+    <!-- JOB DETAIL MODAL -->
+    <div id="jobModal" class="modal hidden">
+        <div class="modal-content">
+
+            <span class="close-btn" onclick="closeJobModal()"></span>
+
+            <div id="modalBody">
+                <p>Loading...</p>
+            </div>
+
+        </div>
+    </div>
+
     <div class="meta-row">
         <span><strong id="jobCount">0</strong> jobs found</span>
 
@@ -59,181 +72,7 @@
         © 2026 TaskFinder TT · Find help, fast.
     </footer>
 
-    <script type="module">
-        import { loadNavbar } from "./js/navbar.js";
-        import { JOB_LISTING } from "./js/API-jobs.js";
-        import { db } from "./firebase/firebaseConfig.js";
-        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        loadNavbar();
-
-        let allJobs = [];
-        let activeCategory = "All";
-
-        // ---------------- NORMALIZE JOB ----------------
-        function normalizeJob(job) {
-            return {
-                id: job.id,
-                title: job.title || "",
-                description: job.description || "",
-                category: job.category || "Other",
-                location: job.location || "Unknown",
-                pay: Number(job.pay || 0),
-                poster: job.poster || job.taskerName || "User",
-                postedAt: job.postedAt || job.createdAt || new Date()
-            };
-        }
-
-        // ---------------- RENDER ----------------
-        function renderJobs(jobs) {
-
-            const grid = document.getElementById("jobsGrid");
-            const countEl = document.getElementById("jobCount");
-
-            countEl.textContent = jobs.length;
-
-            if (!jobs.length) {
-                grid.innerHTML = `<div class="empty-state">No jobs found.</div>`;
-                return;
-            }
-
-            let html = "";
-
-            jobs.forEach(job => {
-
-                const postedDate =
-                    job.postedAt instanceof Date
-                        ? job.postedAt
-                        : new Date(job.postedAt);
-
-                const daysAgo = Math.floor((Date.now() - postedDate) / 86400000);
-
-                const timeLabel =
-                    daysAgo === 0 ? "Today" :
-                        daysAgo === 1 ? "Yesterday" :
-                            `${daysAgo}d ago`;
-
-                html += `
-                    <div class="job-card">
-
-                        <div class="card-top">
-                            <span class="category-badge">${job.category}</span>
-                            <div class="pay-amount">$${job.pay} <small>TTD</small></div>
-                        </div>
-
-                        <div class="job-title">${job.title}</div>
-                        <div class="job-desc">${job.description}</div>
-
-                        <div class="card-meta">
-                            <span>📍 ${job.location}</span>
-                            <span>🕐 ${timeLabel}</span>
-                        </div>
-
-                        <div class="card-footer">
-                            <span class="poster">Posted by ${job.poster}</span>
-                            <a class="view-btn" href="job-detail.html?id=${job.id}">
-                                View Details
-                            </a>
-                        </div>
-
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
-        }
-
-        // ---------------- LOAD JOBS ----------------
-        async function getJobs() {
-
-            let firebaseJobs = [];
-
-            try {
-                const snapshot = await getDocs(collection(db, "jobs"));
-
-                firebaseJobs = snapshot.docs.map(doc => {
-                    const data = doc.data();
-
-                    return normalizeJob({
-                        id: doc.id,
-                        ...data,
-                        postedAt: data.createdAt?.toDate() // 🔥 correct field
-                    });
-                });
-
-                console.log("🔥 Firestore jobs:", firebaseJobs);
-
-            } catch (err) {
-                console.log("Firestore failed:", err);
-            }
-
-            // normalize API jobs too
-            const apiJobs = JOB_LISTING.map(job => normalizeJob(job));
-
-            // MERGE BOTH
-            allJobs = [...apiJobs, ...firebaseJobs];
-
-            filterJobs();
-        }
-
-        // ---------------- FILTER ----------------
-        function filterJobs() {
-
-            const searchVal = document.getElementById("searchInput").value.toLowerCase();
-            const sortVal = document.getElementById("sortSelect").value;
-
-            let filtered = allJobs.filter(job => {
-
-                const matchCategory =
-                    activeCategory === "All" ||
-                    job.category.toLowerCase() === activeCategory.toLowerCase();
-
-                const matchSearch =
-                    job.title.toLowerCase().includes(searchVal) ||
-                    job.category.toLowerCase().includes(searchVal) ||
-                    job.location.toLowerCase().includes(searchVal);
-
-                return matchCategory && matchSearch;
-            });
-
-            // SORT
-            if (sortVal === "pay_high") {
-                filtered.sort((a, b) => b.pay - a.pay);
-            }
-            else if (sortVal === "pay_low") {
-                filtered.sort((a, b) => a.pay - b.pay);
-            }
-            else {
-                filtered.sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt));
-            }
-
-            renderJobs(filtered);
-        }
-
-        // ---------------- CATEGORY ----------------
-        function setCategory(cat, el) {
-
-            activeCategory = cat;
-
-            document.querySelectorAll(".categories span")
-                .forEach(s => s.classList.remove("active"));
-
-            el.classList.add("active");
-
-            filterJobs();
-        }
-
-        // ---------------- EVENTS ----------------
-        document.getElementById("searchInput")
-            .addEventListener("keyup", filterJobs);
-
-        window.filterJobs = filterJobs;
-        window.setCategory = setCategory;
-
-        // INIT
-        getJobs();
-
-    </script>
+    <script type="module" src="./js/browse.js"></script>
 
 </body>
 

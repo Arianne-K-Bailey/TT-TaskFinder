@@ -13,11 +13,15 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+import { JOB_LISTING } from "./API-jobs.js";
+
 let currentUserId = null;
 let currentUserData = null;
 
 let currentMode = "worker";
 let currentTab = "main";
+
+let jobCache = {};
 
 // ======================
 // LOAD PROFILE
@@ -87,7 +91,7 @@ window.saveProfile = async function () {
 
     await updateDoc(userRef, updatedData);
 
-    // 🔥 RE-FETCH UPDATED DATA (IMPORTANT)
+    // RE-FETCH UPDATED DATA
     const updatedSnap = await getDoc(userRef);
     currentUserData = updatedSnap.data();
 
@@ -119,38 +123,71 @@ window.saveProfile = async function () {
 // TASKEE JOBS
 // ======================
 async function loadTaskeeJobs(uid) {
-  const q = query(
-    collection(db, "jobs"),
-    where("acceptedBy", "==", uid)
-  );
-
+  // Get applied jobs references from Firestore
+  const q = query(collection(db, "applications"), where("userId", "==", uid));
   const snap = await getDocs(q);
 
   const container = document.getElementById("taskeeJobs");
   container.innerHTML = "";
 
   if (snap.empty) {
-    container.innerHTML = "<p>No accepted jobs yet.</p>";
+    container.innerHTML = "<p>No applied jobs yet.</p>";
     return;
   }
 
   let html = "";
 
-  snap.forEach((doc) => {
-    const job = doc.data();
+  // Loop through applications
+  for (const docSnap of snap.docs) {
+    const app = docSnap.data();
+    const job = await fetchJob(app.jobId);
+    if (!job) continue;
 
     html += `
       <div class="item">
         <strong>${job.title}</strong>
-        <span class="badge yellow">${job.status}</span>
+        <span class="badge yellow">${app.status || job.status || "applied"}</span>
         <p>${job.location} • TTD $${job.pay}</p>
       </div>
     `;
-  });
+  }
 
   container.innerHTML = html;
 }
 
+// ===================
+// LOAD SAVED JOBS
+// ===================
+async function loadSavedJobs(uid) {
+  // Get saved jobs references from Firestore
+  const q = query(collection(db, "savedJobs"), where("userId", "==", uid));
+  const snap = await getDocs(q);
+
+  const container = document.getElementById("saved");
+  container.innerHTML = "";
+
+  if (snap.empty) {
+    container.innerHTML = "<p>No saved jobs yet.</p>";
+    return;
+  }
+
+  let html = "";
+
+  for (const docSnap of snap.docs) {
+    const saved = docSnap.data();
+    const job = await fetchJob(saved.jobId);
+    if (!job) continue;
+
+    html += `
+      <div class="item">
+        <strong>${job.title}</strong>
+        <p>${job.location} • TTD $${job.pay}</p>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
 
 // ======================
 // TASKER JOBS
@@ -223,16 +260,17 @@ window.showTab = function (tab) {
 // RENDER FUNCTION
 // ======================
 function renderTab() {
-
   const isWorker = currentMode === "worker";
   const isMain = currentTab === "main";
-
-  // ---------------- VIEW CONTROL ----------------
 
   if (!isMain) {
     document.getElementById("workerView").style.display = "none";
     document.getElementById("clientView").style.display = "none";
     document.getElementById("saved").style.display = "block";
+
+    // ✅ Load saved jobs here
+    if (currentUserId) loadSavedJobs(currentUserId);
+
     return;
   }
 
@@ -269,3 +307,41 @@ window.deleteJob = async function (jobId) {
   }
 };
 
+// ================================
+// FETCH JOB (CACHE + API FALLBACK)
+// ================================
+async function fetchJob(jobId) {
+  // Return from cache if already fetched
+  if (jobCache[jobId]) return jobCache[jobId];
+
+  // Try Firestore first
+  const docRef = doc(db, "jobs", jobId);
+  const snap = await getDoc(docRef);
+
+  if (snap.exists()) {
+    jobCache[jobId] = snap.data();
+    return jobCache[jobId];
+  }
+
+  // Fallback to API-JOBS
+  const apiJob = JOB_LISTING.find(job => job.id === jobId);
+  if (apiJob) {
+    const normalizedJob = {
+      id: apiJob.id,
+      title: apiJob.title,
+      category: apiJob.category,
+      pay: apiJob.pay,
+      location: apiJob.location,
+      description: apiJob.description,
+      poster: apiJob.poster,
+      postedAt: apiJob.postedAt,
+      status: "active" // default
+    };
+
+    jobCache[jobId] = normalizedJob;
+    return normalizedJob;
+  }
+
+  console.warn(`Job ${jobId} not found in Firestore or API`);
+  return null;
+}
