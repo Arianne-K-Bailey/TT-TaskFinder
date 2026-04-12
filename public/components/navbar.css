@@ -116,3 +116,84 @@
 .nav-wrapper.scrolled nav {
     box-shadow: 0 8px 32px rgba(215, 38, 56, 0.4);
 }
+
+/* Sidebar for mobile*/
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+  overflow-x: hidden;
+  padding-top: 80px;
+  transition: width 0.3s ease;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Sidebar links */
+.sidebar a {
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 17px;
+  color: #fff;
+  display: block;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+  color: #fff;
+}
+
+/* Close button */
+.sidebar .closebtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.sidebar .closebtn:hover {
+  color: #ffb3b3;
+  transform: rotate(90deg);
+}
+
+/* Hamburger button */
+.openbtn {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #dc2626;
+  transition: color 0.2s ease;
+}
+
+.openbtn:hover {
+  color: #b91c1c;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .openbtn {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-actions {
+    display: none;
+  }
+}
