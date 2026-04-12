@@ -375,14 +375,10 @@
             <h2>Popular categories</h2>
 
             <div class="grid grid-4">
-                <div class="card center">🌿 Lawn Care</div>
-                <div class="card center">🔧 Repairs</div>
-                <div class="card center">🧹 Cleaning</div>
-                <div class="card center">💻 Tech Help</div>
-                <div class="card center">🚰 Plumbing</div>
-                <div class="card center">⚡ Electrical</div>
-                <div class="card center">🎨 Painting</div>
-                <div class="card center">📦 Delivery</div>
+                <div class="card center" data-category="Tutoring">📚 Tutoring</div>
+                <div class="card center" data-category="Delivery">📦 Delivery</div>
+                <div class="card center" data-category="Cleaning">🧹 Cleaning</div>
+                <div class="card center" data-category="Gardening">🌿 Gardening</div>
             </div>
         </div>
     </section>
@@ -439,6 +435,15 @@
                     window.location.href = `./jobs.html?q=${encodeURIComponent(query)}`;
                 });
             }
+
+            // Popular categories
+            const categoryCards = document.querySelectorAll(".grid.grid-4 .card[data-category]");
+            categoryCards.forEach(card => {
+                card.addEventListener("click", () => {
+                    const category = card.getAttribute("data-category");
+                    window.location.href = `./jobs.html?category=${encodeURIComponent(category)}`;
+                });
+            });
         });
     </script>
 </body>

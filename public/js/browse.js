@@ -483,17 +483,23 @@ window.unsaveJob = unsaveJob;
 async function startBrowsePage() {
     const input = document.getElementById("searchInput");
 
-    // Apply query first
-    const query = new URLSearchParams(window.location.search).get("q");
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("q");
+    const categoryParam = urlParams.get("category");
+
     if (query) {
-        if (input) input.value = query;
         activeSearch = query;
+        if (input) input.value = query;
     }
 
-    // Then load jobs and filter
-    await getJobs(); 
+    if (categoryParam) {
+        activeCategory = categoryParam;
+    }
 
-    // Setup input listener
+    await getJobs(); // sets allJobs
+
+    filterJobs();
+
     if (input) {
         input.addEventListener("input", () => {
             activeSearch = input.value.trim();
