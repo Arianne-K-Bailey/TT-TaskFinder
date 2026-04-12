@@ -205,35 +205,77 @@ body {
 
 /* Modal */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: auto;
 }
 
-.hidden {
-  display: none;
+/* Hide modal by default */
+.modal.hidden {
+    display: none;
 }
 
+/* Modal content */
 .modal-content {
-  background: white;
-  width: 90%;
-  max-width: 600px;
-  padding: 20px;
-  border-radius: 12px;
-  position: relative;
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    padding: 30px 25px;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
 }
 
-.close-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  font-size: 22px;
-  cursor: pointer;
+/* Close button */
+.modal .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #dc2626;
+    transition: color 0.2s;
+}
+
+.modal .close-btn:hover {
+    color: #a42424;
+}
+
+/* Job details inside modal */
+.job-detail-card {
+    font-family: 'DM Sans', sans-serif;
+}
+
+.job-detail-card h2 {
+    margin-top: 0;
+    color: #dc2626;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+}
+
+.job-detail-card p {
+    line-height: 1.5;
+    margin: 10px 0;
+    color: #1e293b;
+}
+
+.job-detail-card hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 15px 0;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
